@@ -1,0 +1,14 @@
+// app/components/Header/Header.module.scss
+header {
+  .top {
+    height: 60px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .bottom {
+    height: 76.79px;
+    padding: 12.8px 16px;
+    border-top: 0.8px solid black;
+  }
+}
