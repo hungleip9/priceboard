@@ -5,9 +5,10 @@ import { cookies } from "next/headers";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { AppProvider } from "@/context/appContext";
 //css
-import "./base.css";
-import "./globals.css";
-import "./style.scss";
+import "./style/base.css";
+import "./style/globals.css";
+import "./style/style.scss";
+import "./style/antd.scss";
 
 export const metadata: Metadata = {
   title: "Priceboard",

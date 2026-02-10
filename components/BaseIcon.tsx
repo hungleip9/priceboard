@@ -33,7 +33,7 @@ const BaseIcon: React.FC<BaseIconProps> = ({
 
   const iconElement = (
     <div
-      className={`${className} flex flex-wrap content-center`}
+      className={`flex flex-wrap content-center ${className}`}
       onClick={onClick}
     >
       <Image

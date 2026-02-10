@@ -5,8 +5,6 @@ import BaseIcon from "@/components/BaseIcon";
 import Button from "@/components/Button/Buttom";
 import { InputNumber, Slider } from "antd";
 import { _formatNumber } from "@/lib/global";
-import type { SliderSingleProps } from "antd";
-import { createStaticStyles } from "antd-style";
 export default function BuySell() {
   const [buySell, setBuySell] = useState("buy");
   const tab = () => {
@@ -110,11 +108,11 @@ export default function BuySell() {
           />
         </div>
         <div className="amount-slice mb-4">
-          <div className="flex flex-row justify-between mb-3">
+          <div className="flex flex-row justify-between">
             <p className="text text-sm">Amount</p>
             <p>{formData.amountPercent}%</p>
           </div>
-          <div>
+          <div className="h-[16px]">
             <Slider
               styles={{
                 rail: {
@@ -139,7 +137,69 @@ export default function BuySell() {
               }}
             />
           </div>
+          <div className="btn-slice-box mt-3">
+            <Button
+              className="w-[63.55px]"
+              type="default"
+              onClick={() => handleChange(25, "amountPercent")}
+            >
+              <p className="text-sm">25%</p>
+            </Button>
+            <Button
+              className="w-[63.55px]"
+              type="default"
+              onClick={() => handleChange(50, "amountPercent")}
+            >
+              <p className="text-sm">50%</p>
+            </Button>
+            <Button
+              className="w-[63.55px]"
+              type="default"
+              onClick={() => handleChange(75, "amountPercent")}
+            >
+              <p className="text-sm">75%</p>
+            </Button>
+            <Button
+              className="w-[63.55px]"
+              type="default"
+              onClick={() => handleChange(100, "amountPercent")}
+            >
+              <p className="text-sm">100%</p>
+            </Button>
+          </div>
         </div>
+        <div className="total-box mb-4">
+          <div className="flex flex-row justify-between items-center mb-2">
+            <p className="text-blur text-sm">Total</p>
+            <div>
+              <p className="text font-bold text-base">$5099.98</p>
+              <p className="text-blur text-xs">USD</p>
+            </div>
+          </div>
+          <div className="flex flex-row h-[40.78px]">
+            <BaseIcon
+              width={14}
+              height={14}
+              name={`info`}
+              useMode={false}
+              className="mr-[3px] content-start pt-[4px]"
+            />
+            <p className="text-blur text-xs">
+              Limit order will execute when price reaches $65,432.15
+            </p>
+          </div>
+        </div>
+        <Button
+          className="w-full h-[48px] mb-4"
+          type={buySell === "buy" ? "success" : "danger"}
+        >
+          <p className="text-base font-bold leading-6">
+            {buySell === "buy" ? "Buy" : "Sell"} BTC
+          </p>
+        </Button>
+        <p className="text-blur text-xs text-center">
+          Estimated fee: ~0.10% • Min order: $10
+        </p>
       </div>
     </div>
   );

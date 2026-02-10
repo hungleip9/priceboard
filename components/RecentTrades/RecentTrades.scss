@@ -1,0 +1,27 @@
+.recent-trades {
+  background-color: var(--bg-mode);
+  border: 0.8px solid var(--border-default);
+  border-radius: 8px;
+  height: 612px;
+  .title {
+    height: 43.8px;
+    border-bottom: 0.8px solid var(--border-default);
+    padding: 8px 12px 0.8px 12px;
+  }
+  .header-title {
+    display: flex;
+    align-items: center;
+    height: 48.38px;
+    border-bottom: 0.8px solid var(--border-default);
+    padding: 8px 12px 8.8px 12px;
+  }
+  .row-item {
+    border-bottom: 0.8px solid var(--border-default);
+    display: flex;
+    align-items: center;
+    height: 32px;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

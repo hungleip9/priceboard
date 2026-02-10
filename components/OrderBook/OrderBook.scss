@@ -1,0 +1,38 @@
+.order-book {
+  background-color: var(--bg-mode);
+  border: 0.8px solid var(--border-default);
+  border-radius: 8px;
+  height: 612px;
+  .title {
+    height: 43.8px;
+    border-bottom: 0.8px solid var(--border-default);
+    padding: 8px 12px 0.8px 12px;
+  }
+  .header-title {
+    display: flex;
+    align-items: center;
+    height: 32.79px;
+    border-bottom: 0.8px solid var(--border-default);
+    padding: 8px 12px 8.8px 12px;
+  }
+  .box-sell,
+  .box-buy {
+    padding: 0 15.2px 0.8px 0;
+    margin-bottom: 11.41px;
+    .row-sell,
+    .row-buy {
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      height: 24px;
+      margin-bottom: 4px;
+    }
+  }
+  .price-box {
+    height: 42px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
