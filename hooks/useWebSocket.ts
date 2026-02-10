@@ -21,12 +21,12 @@ export function useWebSocket<T>(url: string) {
       try {
         setLastMessage(JSON.parse(event.data) as T);
       } catch (error) {
-        console.error('Parse message error:', error);
+        console.log('Parse message error:', error);
       }
     };
 
     ws.current.onerror = (error) => {
-      console.error('WebSocket error:', error);
+      console.log('WebSocket error:', error);
     };
 
     ws.current.onclose = () => {

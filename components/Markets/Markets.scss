@@ -1,0 +1,44 @@
+.markets {
+  width: 299.8px;
+  height: 503.71;
+  margin-right: 16.2px;
+  padding: 0.8px;
+  border-radius: 8px;
+  border: 0.8px solid var(--border-default);
+  background-color: var(--bg-mode);
+  .title {
+    height: 51.8px;
+    padding: 12px 16px 0.8px 16px;
+    border-bottom: 0.8px solid var(--border-default);
+    h3 {
+      line-height: 27px;
+    }
+  }
+  table {
+    thead {
+      tr {
+        height: 32.39px;
+        th {
+          padding: 0 8px 0 16px;
+          font-size: 12px;
+          color: var(--text-color-blur);
+          font-weight: 400;
+        }
+      }
+    }
+    tbody {
+      .row-select {
+        background-color: var(--bg-row-select);
+      }
+      tr {
+        border-bottom: 1px solid var(--border-row-table);
+        td {
+          height: 68px;
+        }
+      }
+      tr:last-child {
+        border-bottom: none !important;
+      }
+    }
+  }
+}

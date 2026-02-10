@@ -1,0 +1,62 @@
+.buy-sell-box {
+  width: 299.8px;
+  height: 703.92px;
+  background-color: var(--bg-mode);
+  border-radius: 8px;
+  padding: 0.8px;
+  border: 0.8px solid var(--border-default);
+  .tabs {
+    display: flex;
+    align-items: center;
+    .tab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 149.1px;
+      height: 45.6px;
+      padding: 12px 0 13.6px 0;
+      cursor: pointer;
+    }
+    .tab-buy {
+      background-color: var(--bg-green);
+      p {
+        color: var(--text-green);
+      }
+      border-bottom: 1.6px solid var(--text-green);
+    }
+    .tab-sell {
+      background-color: var(--bg-red);
+      p {
+        color: var(--text-red);
+      }
+      border-bottom: 1.6px solid var(--text-red);
+    }
+  }
+  .content {
+    padding: 16px 16px 0 16px;
+    .available-balance {
+      padding: 12px 12px 0px 12px;
+      margin-bottom: 16px;
+    }
+    .box-price {
+      height: 64px;
+      margin-bottom: 16px;
+    }
+    .box-amount {
+      height: 64px;
+      margin-bottom: 16px;
+    }
+  }
+}
+.ant-slider-handle:hover::after,
+.ant-slider-handle:active::after,
+.ant-slider-handle:focus::after,
+.ant-slider-handle::after {
+  box-shadow: 0 0 0 var(--ant-slider-handle-line-width) var(--bg-button-prime) !important;
+  height: 16px !important;
+  width: 16px !important;
+  top: 2px !important;
+  left: -2px !important;
+  background-color: var(--bg-dot) !important;
+  // background-color: red !important;
+}

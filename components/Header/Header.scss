@@ -1,5 +1,7 @@
 // app/components/Header/Header.module.scss
 header {
+  background-color: var(--bg-mode);
+  border-bottom: 0.8px solid var(--border-default);
   .top {
     height: 60px;
     padding: 16px;
@@ -8,7 +10,21 @@ header {
   }
   .bottom {
     height: 76.79px;
-    padding: 12.8px 16px;
-    border-top: 0.8px solid black;
+    padding: 12.8px 16px 12px 16px;
+    border: 0.8px solid var(--border-default);
+    .box-price {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      align-content: center;
+      background-color: #0596691a;
+      border-radius: 4px;
+      padding: 4px 8px;
+      height: 32px;
+    }
+  }
+  .logo {
+    font-size: 20px;
+    line-height: 28px;
   }
 }

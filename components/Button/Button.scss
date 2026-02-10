@@ -1,0 +1,21 @@
+.btn {
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 8px;
+}
+.prime {
+  color: var(--color-button-prime);
+  background-color: var(--bg-button-prime);
+}
+.success {
+  color: var(--color-button-success);
+  background-color: var(--bg-button-success);
+}
+.danger {
+  color: var(--color-button-danger);
+  background-color: var(--bg-button-danger);
+}
+.default {
+  color: var(--color-button-default);
+  background-color: var(--bg-button-default);
+}

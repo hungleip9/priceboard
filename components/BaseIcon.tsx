@@ -1,11 +1,17 @@
-import React from "react";
+"use client";
+import React, { useContext } from "react";
+import Image from "next/image";
+import { Tooltip } from "antd";
+import { AppContext } from "@/context/appContext";
 
 interface BaseIconProps {
   name: string; // Tên file SVG (không cần .svg)
-  width?: number | string;
-  height?: number | string;
+  width?: number;
+  height?: number;
   className?: string;
   color?: string;
+  tooltip?: string;
+  useMode?: boolean;
   onClick?: () => void;
 }
 
@@ -15,34 +21,42 @@ const BaseIcon: React.FC<BaseIconProps> = ({
   height = 24,
   className = "",
   color,
+  tooltip = "",
+  useMode = true,
   onClick,
 }) => {
-  // Đường dẫn đến file SVG trong thư mục public
-  const iconPath = `/icons/${name}.svg`;
-
-  const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    console.error(`Icon "${name}" not found at ${iconPath}`);
-    e.currentTarget.style.display = "none";
+  const { mode } = useContext(AppContext) as {
+    mode: string;
   };
+  const nameMap = useMode && mode === "dark" ? name + "-dark" : name;
+  const iconPath = `/icons/${nameMap}.svg`;
 
-  const style: React.CSSProperties = {
-    width: typeof width === "number" ? `${width}px` : width,
-    height: typeof height === "number" ? `${height}px` : height,
-    ...(color && { fill: color }),
-  };
-
-  return (
-    <div className="p-2">
-      <img
+  const iconElement = (
+    <div
+      className={`${className} flex flex-wrap content-center`}
+      onClick={onClick}
+    >
+      <Image
         src={iconPath}
         alt={`${name} icon`}
-        style={style}
-        className={`base-icon ${className}`}
-        onClick={onClick}
+        width={width}
+        height={height}
+        className="object-contain"
         loading="lazy"
+        unoptimized={true}
+        style={{
+          filter: color ? "inherit" : undefined,
+        }}
+        onClick={onClick}
       />
     </div>
   );
+
+  if (tooltip) {
+    return <Tooltip title={tooltip}>{iconElement}</Tooltip>;
+  }
+
+  return iconElement;
 };
 
 export default BaseIcon;

@@ -1,0 +1,76 @@
+:root {
+  --text-color-default: #0a0a0a;
+  --text-color-blur: #64748b;
+  --bg-default: #edf0f5;
+  --bg-mode: #f8f9fa;
+  --bg-green: #0596691a;
+  --bg-red: #dc26261a;
+  --text-green: #059669;
+  --text-red: #dc2626;
+  --border-default: #e2e8f0;
+  --bg-row-select: #e2e8f080;
+  --border-row-table: #e2e8f080;
+  /* button */
+  --bg-button-default: #f1f5f9;
+  --color-button-default: #0f172a;
+  --bg-button-success: #059669;
+  --color-button-success: #ffffff;
+  --bg-button-prime: #2563eb;
+  --color-button-prime: #ffffff;
+  --bg-button-danger: #dc2626;
+  --color-button-danger: #ffffff;
+  /* slice */
+  --slice-rail: #ffffff;
+  --bg-dot: #ffffff;
+}
+.dark {
+  --text-color-default: #f1f2f5;
+  --text-color-blur: #6b7280;
+  --bg-default: #0a0a12;
+  --bg-mode: #14141f;
+  --bg-green: #22c55e1a;
+  --bg-red: #ef44441a;
+  --text-green: #22c55e;
+  --text-red: #ef4444;
+  --border-default: #1f2031;
+  --bg-row-select: #1a1d2a;
+  --border-row-table: #1f203180;
+  /* button */
+  --bg-button-default: #1f2031;
+  --color-button-default: #f1f2f5;
+  --bg-button-success: #22c55e;
+  --color-button-success: #ffffff;
+  --bg-button-prime: #3b82f6;
+  --color-button-prime: #ffffff;
+  --bg-button-danger: #ef4444;
+  --color-button-danger: #ffffff;
+  /* slice */
+  --slice-rail: #1a1b2e;
+  --bg-dot: #0a0a12;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 700;
+  color: var(--text-color-default);
+}
+
+h1 {
+  /* 32px */
+  font-size: 2em;
+}
+h2 {
+  /* 24px */
+  font-size: 1.5em;
+}
+h3 {
+  font-size: 18px;
+}
+h4 {
+  font-size: 16px;
+}
+
+.ant-input-number-actions {
+  display: none !important;
+}

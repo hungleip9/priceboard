@@ -1,4 +1,6 @@
 // app/components/Footer/Footer.module.scss
 footer {
-  height: 204.8px;
+  background-color: var(--bg-mode);
+  padding: 24px 16px 0 16px;
+  border-top: 0.8px solid var(--border-default);
 }
