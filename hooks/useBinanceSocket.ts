@@ -1,67 +1,41 @@
 // hooks/useBinanceSocket.ts
-import { useState, useEffect, useRef } from 'react';
-import { Ticker24hr, TradeData } from '@/types/binance';
+import { useEffect, useRef } from 'react';
 import { _createId } from '@/lib/global';
-
-interface UseBinanceSocketProps {
-  symbol?: string
-  streamType?: 'trade' | 'kline' | 'depth' | 'ticker';
-}
-interface DataTicker {
-  close: string,
-  open: string,
-  hight: string,
-  low: string,
-  time: number,
-  volumn: string,
-  change: string,
-}
-interface DataTrade {
-  id: string;
-  price: string;
-  amount: string;
-  time: number;
-}
-interface DataDepth {
-  asks: string[][]
-  bids: string[][]
-}
-const useBinanceSocket = ({
-  symbol = '',
-  streamType = "ticker"
-}: UseBinanceSocketProps) => {
-  let symbolCheck = ''
-  const [dataTrade, setDataTrade] = useState<DataTrade[]>([]);
-  const [dataTicker, setDataTicker] = useState<Record<string, DataTicker>>({});
-  const [dataDepth, setDataDepth] = useState<DataDepth>({ asks: [], bids: [] });
+// store
+import { setDataTicker } from "@/store/dataTicker";
+import { setDataTrade } from "@/store/dataTrade";
+import { setDataDepth } from "@/store/dataDepth";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+const useBinanceSocket = () => {
+  // store
+  const dispatch = useDispatch();
+  const symbolStore = useSelector((state: RootState) => state.symbol.value);
   const wsRef = useRef<WebSocket | null>(null);
   const symbols = ["btcusdt", "ethusdt", "bnbusdt", "solusdt", "adausdt", "xrpusdt"]
-  useEffect(() => {
+  const connect = (symbolDrop: string) => {
+    // close old connect.
+    if (wsRef.current) {
+      wsRef.current.close();
+      wsRef.current = null;
+    }
     // Created WebSocket connection
     const ws = new WebSocket(`${process.env.NEXT_PUBLIC_WS_API}`);
     wsRef.current = ws;
     ws.onopen = () => {
       console.log('✅ WebSocket connected (Singleton)');
       // Created streams
-      let id = ''
-      let streams = [] as string[]
-      if (streamType === 'ticker') {
-        id = `socket-ticker-${streamType}`
-        streams = symbols.map(s =>
-          `${s.toLowerCase()}@${streamType}`
-        );
-      } else if (streamType === 'depth' && symbol) {
-        id = `socket-depth-${streamType}`
-        streams = [`${symbol.toLowerCase()}@${streamType}`]
-      } else if (streamType === 'trade' && symbol) {
-        id = `socket-trade-${streamType}`
-        streams = [`${symbol.toLowerCase()}@${streamType}`]
-      }
+      const streams = [] as string[]
+      symbols.forEach(s => {
+        streams.push(`${s.toLowerCase()}@ticker`)
+      });
+      streams.push(`${symbolDrop.toLowerCase()}@depth`)
+      streams.push(`${symbolDrop.toLowerCase()}@trade`)
       // Subscribe
       ws.send(JSON.stringify({
         method: 'SUBSCRIBE',
         params: streams,
-        id: id
+        id: 1
       }));
     };
 
@@ -82,52 +56,52 @@ const useBinanceSocket = ({
             volumn: message.q,
             change: message.P,
           }
-          setDataTicker(prev => ({ ...prev, [nameSymbol]: newData }));
-        } else if (message.e === "trade") {
-          // trade
-          if (symbolCheck !== nameSymbol) {
-            symbolCheck = nameSymbol
-            setDataTrade([]);
-            return
-          }
+          dispatch(setDataTicker({ symbol: nameSymbol, value: newData }))
+          return
+        }
+        if (nameSymbol !== symbolDrop) return
+        if (message.e === "trade") {
+          if (Number(message.q) === 0) return
           const newTrade = {
             id: _createId(),
             price: message.p,
             amount: message.q,
             time: message.T
           }
-          setDataTrade(prev => ([newTrade, ...prev]));
+          dispatch(setDataTrade(newTrade))
         } else if (message.e === "depthUpdate") {
-          // depth
-          if (symbolCheck !== nameSymbol) {
-            symbolCheck = nameSymbol
-            setDataDepth({ asks: [], bids: [] });
-            return
-          }
-          const id = message.u
-          const arrAsks = message.a || []
-          const arrBids = message.b || []
-          const totalAsksQuantity = arrAsks.reduce((sum: number, bid: string[]) => {
-            return sum + Number(bid[1]);
+          const arrAsks = message.a.filter((e: string[]) => Number(e[1]) > 0).reverse().slice(-8) || []
+          const arrBids = message.b.filter((e: string[]) => Number(e[1]) > 0).slice(0, 8) || []
+          const totalAsksQuantity = arrAsks.reduce((sum: number, ask: string[]) => {
+            return sum + Number(ask[1]);
           }, 0);
           const totalBidsQuantity = arrBids.reduce((sum: number, bid: string[]) => {
             return sum + Number(bid[1]);
           }, 0);
-          const asks = arrAsks.map((e: string, index: number) => {
-            const tottal = Number(e[0]) + Number(e[1]) || ''
-            const percent = Math.round(((Number(e[1]) * 100) / totalAsksQuantity) * 2) || 0;
-            return [...e, `${tottal}`, `asks-${id}-${index}`, `${percent}%`]
-          })
-          const bids = arrBids.map((e: string, index: number) => {
-            const tottal = Number(e[0]) + Number(e[1]) || ''
-            const percent = Math.round(((Number(e[1]) * 100) / totalBidsQuantity) * 2) || 0;
-            return [...e, `${tottal}`, `bids-${id}-${index}`, `${percent}%`]
-          })
+          const asks = arrAsks
+            .map((e: string[]) => {
+              const price = Number(e[0]);
+              const quantity = Number(e[1]);
+              const total = (price * quantity).toFixed(2);
+              const percent = Math.round(((quantity * 100) / totalAsksQuantity) * 2) || 0;
+
+              return [e[0], e[1], total, `${percent}%`];
+            });
+
+          const bids = arrBids
+            .map((e: string[]) => {
+              const price = Number(e[0]);
+              const quantity = Number(e[1]);
+              const total = (price * quantity).toFixed(2);
+              const percent = Math.round(((quantity * 100) / totalBidsQuantity) * 2) || 0;
+
+              return [e[0], e[1], total, `${percent}%`];
+            });
           const newData = {
             asks: asks || [],
             bids: bids || [],
           }
-          setDataDepth(newData)
+          dispatch(setDataDepth(newData))
         }
       } catch (error) {
         console.error('Parse error:', error);
@@ -137,6 +111,10 @@ const useBinanceSocket = ({
     ws.onerror = (error) => {
       console.error('❌ WebSocket error:', error);
     };
+  }
+  useEffect(() => {
+    if (!symbolStore) return;
+    connect(symbolStore)
 
     // Cleanup
     return () => {
@@ -144,8 +122,7 @@ const useBinanceSocket = ({
         wsRef.current.close();
       }
     };
-  }, [streamType]);
-  return { dataTicker, dataTrade, dataDepth };
+  }, [symbolStore]);
 };
 
 export default useBinanceSocket;

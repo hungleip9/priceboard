@@ -9,18 +9,15 @@ import { useContext, useEffect } from "react";
 import { AppContext } from "@/context/appContext";
 import { _formatNumber, _getLabelForSymbol } from "@/lib/global";
 import ChangeBox from "../ChangeBox/ChangeBox";
-import useBinanceSocket from "@/hooks/useBinanceSocket";
 
-import { setSymbol } from "@/store/selectSymbol";
 import { RootState } from "@/store";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function Header() {
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
-  const dispatch = useDispatch();
-  const { dataTicker } = useBinanceSocket({
-    streamType: "ticker",
-  });
+  const dataTickerStore = useSelector(
+    (state: RootState) => state.dataTicker.value,
+  );
   const router = useRouter();
   const pathname = usePathname();
   const links = [
@@ -97,12 +94,12 @@ export default function Header() {
               {_getLabelForSymbol(symbolStore)}
             </p>
             <h2 className="text text-2xl font-bold">
-              ${_formatNumber(dataTicker[symbolStore]?.close)}
+              ${_formatNumber(dataTickerStore[symbolStore]?.close)}
             </h2>
           </div>
           <div className="mr-6">
             {ChangeBox(
-              dataTicker[symbolStore]?.change,
+              dataTickerStore[symbolStore]?.change,
               "box-price",
               "!text-base",
               16,
@@ -113,19 +110,19 @@ export default function Header() {
             <div className="mr-6">
               <p className="text-blur text-sm">24h High</p>
               <p className="text text-sm">
-                ${_formatNumber(dataTicker[symbolStore]?.hight)}
+                ${_formatNumber(dataTickerStore[symbolStore]?.hight)}
               </p>
             </div>
             <div className="mr-6">
               <p className="text-blur text-sm">24h Low</p>
               <p className="text text-sm">
-                ${_formatNumber(dataTicker[symbolStore]?.low)}
+                ${_formatNumber(dataTickerStore[symbolStore]?.low)}
               </p>
             </div>
             <div>
               <p className="text-blur text-sm">24h Volume</p>
               <p className="text text-sm">
-                ${_formatNumber(dataTicker[symbolStore]?.volumn)}
+                ${_formatNumber(dataTickerStore[symbolStore]?.volumn)}
               </p>
             </div>
           </div>

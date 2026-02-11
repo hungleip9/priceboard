@@ -8,6 +8,7 @@ import ChangeBox from "@/components/ChangeBox/ChangeBox";
 import dynamic from "next/dynamic";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
+import useBinanceSocket from "@/hooks/useBinanceSocket";
 
 const RecentTrades = dynamic(
   () => import("@/components/RecentTrades/RecentTrades"),
@@ -22,6 +23,7 @@ const Markets = dynamic(() => import("@/components/Markets/Markets"), {
   ssr: false,
 });
 export default function Page() {
+  useBinanceSocket();
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
 
   const onSelect = (val: string) => {

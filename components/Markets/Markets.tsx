@@ -3,7 +3,6 @@ import { useState } from "react";
 import "./Markets.scss";
 import BaseIcon from "@/components/BaseIcon";
 import ChangeBox from "@/components/ChangeBox/ChangeBox";
-import useBinanceSocket from "@/hooks/useBinanceSocket";
 import { _formatNumber, _numberShortener } from "@/lib/global";
 import { setSymbol } from "@/store/selectSymbol";
 import { RootState } from "@/store";
@@ -16,10 +15,10 @@ type CryptoPair = {
 };
 export default function Markets() {
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
+  const dataTickerStore = useSelector(
+    (state: RootState) => state.dataTicker.value,
+  );
   const dispatch = useDispatch();
-  const { dataTicker } = useBinanceSocket({
-    streamType: "ticker",
-  });
   const initialData: CryptoPair[] = [
     {
       symbol: "btcusdt",
@@ -108,13 +107,18 @@ export default function Markets() {
                   </div>
                 </td>
                 <td className="text-right text-base">
-                  ${_formatNumber(dataTicker[crypto.symbol]?.close)}
+                  ${_formatNumber(dataTickerStore[crypto.symbol]?.close)}
                 </td>
                 <td>
                   <div className="flex flex-col content-end items-end pr-2">
-                    {ChangeBox(dataTicker[crypto.symbol]?.change, "", "ml-1")}
+                    {ChangeBox(
+                      dataTickerStore[crypto.symbol]?.change,
+                      "",
+                      "ml-1",
+                    )}
                     <p className="text-blur text-xs">
-                      ${_numberShortener(dataTicker[crypto.symbol]?.volumn)}
+                      $
+                      {_numberShortener(dataTickerStore[crypto.symbol]?.volumn)}
                     </p>
                   </div>
                 </td>

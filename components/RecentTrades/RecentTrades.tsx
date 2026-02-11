@@ -4,7 +4,6 @@ import {
   _getRealNameForSymbol,
 } from "@/lib/global";
 import "./RecentTrades.scss";
-import useBinanceSocket from "@/hooks/useBinanceSocket";
 import VirtualList from "@rc-component/virtual-list";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
@@ -16,10 +15,9 @@ interface DataTrade {
 }
 export default function RecentTrades() {
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
-  const { dataTrade } = useBinanceSocket({
-    symbol: symbolStore,
-    streamType: "trade",
-  });
+  const dataTradeStore = useSelector(
+    (state: RootState) => state.dataTrade.value,
+  );
   return (
     <div className="recent-trades flex flex-col">
       <div className="title">
@@ -37,7 +35,12 @@ export default function RecentTrades() {
         </p>
       </div>
       <div className="overflow-auto flex-1">
-        <VirtualList data={dataTrade} height={510} itemHeight={32} itemKey="id">
+        <VirtualList
+          data={dataTradeStore}
+          height={510}
+          itemHeight={32}
+          itemKey="id"
+        >
           {(item: DataTrade) => (
             <div key={item.id} className="row-item">
               <p className="text-green text-base leading-6 w-[101.9px] text-center">

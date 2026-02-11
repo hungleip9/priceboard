@@ -1,6 +1,6 @@
 ```bash
 # install
-npm install
+yarn install
 # run app
 yarn dev
 ```

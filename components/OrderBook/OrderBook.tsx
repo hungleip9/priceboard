@@ -1,16 +1,16 @@
-import { _formatNumber, _getRealNameForSymbol } from "@/lib/global";
+import { _createId, _formatNumber, _getRealNameForSymbol } from "@/lib/global";
 import "./OrderBook.scss";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
-import useBinanceSocket from "@/hooks/useBinanceSocket";
 import VirtualList from "@rc-component/virtual-list";
 export default function OrderBook() {
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
-  const { dataDepth } = useBinanceSocket({
-    symbol: symbolStore,
-    streamType: "depth",
-  });
-  console.log("dataDepth: ", dataDepth);
+  const dataDepthStore = useSelector(
+    (state: RootState) => state.dataDepth.value,
+  );
+  const dataTickerStore = useSelector(
+    (state: RootState) => state.dataTicker.value,
+  );
   return (
     <div className="order-book">
       <div className="title">
@@ -27,13 +27,13 @@ export default function OrderBook() {
       </div>
       <div className="box-sell">
         <VirtualList
-          data={dataDepth.asks}
+          data={dataDepthStore.asks}
           height={220}
           itemHeight={24}
           itemKey="id"
         >
           {(item: string[]) => (
-            <div key={item[3]} className="row-sell relative">
+            <div key={_createId()} className="row-sell relative">
               <p className="text-red text-sm leading-5 w-[75.66px] mr-4">
                 {_formatNumber(item[0], {
                   minimumFractionDigits: 2,
@@ -54,24 +54,26 @@ export default function OrderBook() {
               </p>
               <span
                 className={`absolute top-0 right-0 h-full bg-red`}
-                style={{ width: item[4] }}
+                style={{ width: item[3] }}
               ></span>
             </div>
           )}
         </VirtualList>
       </div>
       <div className="price-box">
-        <h4 className="leading-6">{_formatNumber(65422.15)}</h4>
+        <h4 className="leading-6">
+          {_formatNumber(dataTickerStore[symbolStore]?.close)}
+        </h4>
       </div>
       <div className="box-buy mb-3.5">
         <VirtualList
-          data={dataDepth.bids}
+          data={dataDepthStore.bids}
           height={220}
           itemHeight={24}
           itemKey="id"
         >
           {(item: string[]) => (
-            <div key={item[3]} className="row-buy relative">
+            <div key={_createId()} className="row-buy relative">
               <p className="text-green text-sm leading-5 w-[75.66px] mr-4">
                 {_formatNumber(item[0], {
                   minimumFractionDigits: 2,
@@ -92,7 +94,7 @@ export default function OrderBook() {
               </p>
               <span
                 className={`absolute top-0 right-0 h-full bg-green`}
-                style={{ width: item[4] }}
+                style={{ width: item[3] }}
               ></span>
             </div>
           )}
