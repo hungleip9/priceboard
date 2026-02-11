@@ -2,16 +2,12 @@ export function _formatNumber(
   value: number | string | null | undefined,
   options: Intl.NumberFormatOptions = {}
 ): string {
-  // Xử lý giá trị không hợp lệ
   if (value == null) return "00.00";
-
   const num = typeof value === "string" ? Number(value) : value;
-
   if (isNaN(num) || !isFinite(num)) return "00.00";
-
   return new Intl.NumberFormat("en-US", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 20,
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
     ...options,
   }).format(num);
 }
@@ -71,4 +67,34 @@ export function _numberShortener(num: number | string | null, digits: number = 0
     soChia = Number((numberMap / item.value).toFixed(digits))
   }
   return Intl.NumberFormat("en-US").format(soChia).replace(rx, "$1") + `${!hidenSymbol ? item.symbol : ''}` || '' as string
+}
+
+export function _getLabelForSymbol(symbol = '') {
+  const obj = {
+    "btcusdt": 'BTC/USD',
+    "ethusdt": "ETH/USD",
+    "bnbusdt": "BNB/USD",
+    "solusdt": "SOL/USD",
+    "adausdt": "ADA/USD",
+    "xrpusdt": "XRP/USD",
+  } as Record<string, string>
+  return obj[symbol] || ''
+}
+export function _getRealNameForSymbol(symbol = '') {
+  const obj = {
+    "btcusdt": 'BTC',
+    "ethusdt": "ETH",
+    "bnbusdt": "BNB",
+    "solusdt": "SOL",
+    "adausdt": "ADA",
+    "xrpusdt": "XRP",
+  } as Record<string, string>
+  return obj[symbol] || ''
+}
+
+export function _createId() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
 }

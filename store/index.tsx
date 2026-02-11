@@ -1,15 +1,12 @@
 // store.ts
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./counterSlice";
-// import infoUserReducer from "./infoUserSlice";
+import selectSymbolReducer from "./selectSymbol";
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
-    // infoUser: infoUserReducer,
+    symbol: selectSymbolReducer,
   },
 });
 
-// Infer types (rất hữu ích khi dùng TypeScript)
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

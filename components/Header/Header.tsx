@@ -7,10 +7,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useContext, useEffect } from "react";
 import { AppContext } from "@/context/appContext";
-import { _formatNumber } from "@/lib/global";
+import { _formatNumber, _getLabelForSymbol } from "@/lib/global";
 import ChangeBox from "../ChangeBox/ChangeBox";
 import useBinanceSocket from "@/hooks/useBinanceSocket";
+
+import { setSymbol } from "@/store/selectSymbol";
+import { RootState } from "@/store";
+import { useSelector, useDispatch } from "react-redux";
+
 export default function Header() {
+  const symbolStore = useSelector((state: RootState) => state.symbol.value);
+  const dispatch = useDispatch();
   const { dataTicker } = useBinanceSocket({
     streamType: "ticker",
   });
@@ -86,14 +93,16 @@ export default function Header() {
       <div className="bottom">
         <div className="flex flex-wrap flex-row content-center items-center">
           <div className="mr-6">
-            <p className="text-blur text-sm">BTCUSD</p>
+            <p className="text-blur text-sm uppercase">
+              {_getLabelForSymbol(symbolStore)}
+            </p>
             <h2 className="text text-2xl font-bold">
-              ${_formatNumber(dataTicker["btcusdt"]?.close)}
+              ${_formatNumber(dataTicker[symbolStore]?.close)}
             </h2>
           </div>
           <div className="mr-6">
             {ChangeBox(
-              dataTicker["btcusdt"]?.change,
+              dataTicker[symbolStore]?.change,
               "box-price",
               "!text-base",
               16,
@@ -103,15 +112,21 @@ export default function Header() {
           <div className="flex flex-wrap flex-row content-center">
             <div className="mr-6">
               <p className="text-blur text-sm">24h High</p>
-              <p className="text text-sm">${_formatNumber("68703.758")}</p>
+              <p className="text text-sm">
+                ${_formatNumber(dataTicker[symbolStore]?.hight)}
+              </p>
             </div>
             <div className="mr-6">
               <p className="text-blur text-sm">24h Low</p>
-              <p className="text text-sm">${_formatNumber("62160.542")}</p>
+              <p className="text text-sm">
+                ${_formatNumber(dataTicker[symbolStore]?.low)}
+              </p>
             </div>
             <div>
               <p className="text-blur text-sm">24h Volume</p>
-              <p className="text text-sm">${_formatNumber("2845123456")}</p>
+              <p className="text text-sm">
+                ${_formatNumber(dataTicker[symbolStore]?.volumn)}
+              </p>
             </div>
           </div>
         </div>

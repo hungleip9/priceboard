@@ -19,6 +19,8 @@
   .box-buy {
     padding: 0 15.2px 0.8px 0;
     margin-bottom: 11.41px;
+    overflow-y: auto;
+    height: 225px;
     .row-sell,
     .row-buy {
       padding: 0 12px;

@@ -1,14 +1,29 @@
 "use client";
-import Markets from "@/components/Markets/Markets";
 import BuySell from "@/components/BuySell/BuySell";
 import BaseIcon from "@/components/BaseIcon";
 import "./Trade.scss";
-import OrderBook from "@/components/OrderBook/OrderBook";
-import RecentTrades from "@/components/RecentTrades/RecentTrades";
 import Kline from "@/components/Kline/Kline";
 import Radio from "@/components/Radio/Radio";
 import ChangeBox from "@/components/ChangeBox/ChangeBox";
-export default function page() {
+import dynamic from "next/dynamic";
+import { RootState } from "@/store";
+import { useSelector } from "react-redux";
+
+const RecentTrades = dynamic(
+  () => import("@/components/RecentTrades/RecentTrades"),
+  {
+    ssr: false,
+  },
+);
+const OrderBook = dynamic(() => import("@/components/OrderBook/OrderBook"), {
+  ssr: false,
+});
+const Markets = dynamic(() => import("@/components/Markets/Markets"), {
+  ssr: false,
+});
+export default function Page() {
+  const symbolStore = useSelector((state: RootState) => state.symbol.value);
+
   const onSelect = (val: string) => {
     console.log("val: ", val);
   };
@@ -57,10 +72,10 @@ export default function page() {
         </div>
         <div className="flex flex-row items-center">
           <div className="mr-4 w-[300px]">
-            <OrderBook symbol="BTC" />
+            <OrderBook key={`OrderBook-${symbolStore}`} />
           </div>
           <div className="w-[299px]">
-            <RecentTrades symbol="BTC" />
+            <RecentTrades key={`RecentTrades-${symbolStore}`} />
           </div>
         </div>
       </div>

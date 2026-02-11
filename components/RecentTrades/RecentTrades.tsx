@@ -1,11 +1,27 @@
-import { _formatNumber } from "@/lib/global";
+import {
+  _formatNumber,
+  _getFormatTime,
+  _getRealNameForSymbol,
+} from "@/lib/global";
 import "./RecentTrades.scss";
-interface Props {
-  symbol: string;
+import useBinanceSocket from "@/hooks/useBinanceSocket";
+import VirtualList from "@rc-component/virtual-list";
+import { RootState } from "@/store";
+import { useSelector } from "react-redux";
+interface DataTrade {
+  id: string;
+  price: string;
+  amount: string;
+  time: number;
 }
-export default function RecentTrades({ symbol }: Props) {
+export default function RecentTrades() {
+  const symbolStore = useSelector((state: RootState) => state.symbol.value);
+  const { dataTrade } = useBinanceSocket({
+    symbol: symbolStore,
+    streamType: "trade",
+  });
   return (
-    <div className="recent-trades">
+    <div className="recent-trades flex flex-col">
       <div className="title">
         <h3>Recent Trades</h3>
       </div>
@@ -14,26 +30,34 @@ export default function RecentTrades({ symbol }: Props) {
           Price (USD)
         </p>
         <p className="text-blur text-xs leading-4 mr-4 w-[96.47px] text-center">
-          Amount ({symbol})
+          Amount ({_getRealNameForSymbol(symbolStore)})
         </p>
         <p className="text-blur text-xs leading-4 text-center w-[84.62px]">
           Time
         </p>
       </div>
-      <div>
-        {Array.from({ length: 14 }).map((_, index) => (
-          <div key={index} className="row-item">
-            <p className="text-green text-base leading-6 w-[101.9px] text-center">
-              {_formatNumber(65453.72)}
-            </p>
-            <p className="text text-base leading-6 w-[101.9px] text-center">
-              0.091540
-            </p>
-            <p className="text-blur text-base leading-5 w-[84.65px] text-center">
-              10:06:39
-            </p>
-          </div>
-        ))}
+      <div className="overflow-auto flex-1">
+        <VirtualList data={dataTrade} height={510} itemHeight={32} itemKey="id">
+          {(item: DataTrade) => (
+            <div key={item.id} className="row-item">
+              <p className="text-green text-base leading-6 w-[101.9px] text-center">
+                {_formatNumber(item.price)}
+              </p>
+              <p className="text text-base leading-6 w-[101.9px] text-center">
+                {_formatNumber(item.amount, {
+                  minimumFractionDigits: 5,
+                  maximumFractionDigits: 5,
+                })}
+              </p>
+              <p className="text-blur text-base leading-5 w-[84.65px] text-center">
+                {_getFormatTime(item.time, {
+                  getOnlyTime: true,
+                  second: true,
+                })}
+              </p>
+            </div>
+          )}
+        </VirtualList>
       </div>
     </div>
   );

@@ -5,6 +5,9 @@ import BaseIcon from "@/components/BaseIcon";
 import ChangeBox from "@/components/ChangeBox/ChangeBox";
 import useBinanceSocket from "@/hooks/useBinanceSocket";
 import { _formatNumber, _numberShortener } from "@/lib/global";
+import { setSymbol } from "@/store/selectSymbol";
+import { RootState } from "@/store";
+import { useSelector, useDispatch } from "react-redux";
 
 type CryptoPair = {
   symbol: string;
@@ -12,6 +15,8 @@ type CryptoPair = {
   watchList: boolean;
 };
 export default function Markets() {
+  const symbolStore = useSelector((state: RootState) => state.symbol.value);
+  const dispatch = useDispatch();
   const { dataTicker } = useBinanceSocket({
     streamType: "ticker",
   });
@@ -48,7 +53,6 @@ export default function Markets() {
     },
   ];
   const [cryptoData, setCryptoData] = useState<CryptoPair[]>(initialData);
-  const [selectSymbol, setSelectSymbol] = useState<string>("btcusdt");
   const getSymbol = (symbol = ""): string => {
     if (!symbol) return "";
     return symbol.replace("/", "");
@@ -91,8 +95,8 @@ export default function Markets() {
             {cryptoData.map((crypto, index) => (
               <tr
                 key={crypto.label}
-                className={selectSymbol === crypto.symbol ? "row-select" : ""}
-                onClick={() => setSelectSymbol(crypto.symbol)}
+                className={`cursor-pointer ${symbolStore === crypto.symbol ? "row-select" : ""}`}
+                onClick={() => dispatch(setSymbol(crypto.symbol))}
               >
                 <td className="flex justify-center h-full">
                   {starBox(crypto.watchList, index)}

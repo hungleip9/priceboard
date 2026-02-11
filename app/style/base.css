@@ -26,6 +26,9 @@
   --bg-input: #ffffff;
   --border-input: #e2e8f0;
   --color-text-input: #64748b;
+  /* scroll */
+  --color-scroll: #14141f;
+  --bg-color-scroll: #f8f9fa;
 }
 .dark {
   --text-color-default: #f1f2f5;
@@ -55,6 +58,9 @@
   --bg-input: #1f20314d;
   --border-input: #1f2031;
   --color-text-input: #6b7280;
+  /* scroll */
+  --color-scroll: #f8f9fa;
+  --bg-color-scroll: #14141f;
 }
 h1,
 h2,
@@ -79,6 +85,21 @@ h4 {
   font-size: 16px;
 }
 
-.ant-input-number-actions {
-  display: none !important;
+::-webkit-scrollbar {
+  width: 10px;
+  height: 7px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--bg-color-scroll);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-scroll);
+  transform: translateY(0px);
+  border-radius: 10px;
 }

@@ -19,3 +19,14 @@
     color: var(--color-text-input) !important;
   }
 }
+// list
+.ant-list-item {
+  padding: 0 !important;
+}
+
+.rc-virtual-list-scrollbar {
+  background-color: var(--bg-color-scroll) !important;
+  .rc-virtual-list-scrollbar-thumb {
+    background-color: var(--color-scroll) !important;
+  }
+}
