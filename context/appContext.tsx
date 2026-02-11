@@ -1,5 +1,8 @@
 "use client";
+
 import React, { useState, createContext } from "react";
+import { Provider } from "react-redux";
+import { store } from "@/store";
 
 export const AppContext = createContext({});
 
@@ -13,8 +16,10 @@ export const AppProvider = ({
   const [mode, setMode] = useState<string>(initialTheme);
 
   return (
-    <AppContext.Provider value={{ mode, setMode }}>
-      {children}
-    </AppContext.Provider>
+    <Provider store={store}>
+      <AppContext.Provider value={{ mode, setMode }}>
+        {children}
+      </AppContext.Provider>
+    </Provider>
   );
 };

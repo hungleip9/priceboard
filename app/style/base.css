@@ -22,6 +22,10 @@
   /* slice */
   --slice-rail: #ffffff;
   --bg-dot: #ffffff;
+  /* input */
+  --bg-input: #ffffff;
+  --border-input: #e2e8f0;
+  --color-text-input: #64748b;
 }
 .dark {
   --text-color-default: #f1f2f5;
@@ -47,6 +51,10 @@
   /* slice */
   --slice-rail: #1a1b2e;
   --bg-dot: #0a0a12;
+  /* input */
+  --bg-input: #1f20314d;
+  --border-input: #1f2031;
+  --color-text-input: #6b7280;
 }
 h1,
 h2,

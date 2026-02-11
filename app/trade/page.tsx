@@ -1,10 +1,17 @@
+"use client";
 import Markets from "@/components/Markets/Markets";
 import BuySell from "@/components/BuySell/BuySell";
 import BaseIcon from "@/components/BaseIcon";
 import "./Trade.scss";
 import OrderBook from "@/components/OrderBook/OrderBook";
 import RecentTrades from "@/components/RecentTrades/RecentTrades";
+import Kline from "@/components/Kline/Kline";
+import Radio from "@/components/Radio/Radio";
+import ChangeBox from "@/components/ChangeBox/ChangeBox";
 export default function page() {
+  const onSelect = (val: string) => {
+    console.log("val: ", val);
+  };
   return (
     <div className="w-full h-[1277px] flex flex-row trade-page">
       <Markets />
@@ -13,10 +20,7 @@ export default function page() {
           <div className="info-market-box mr-3">
             <p className="text-blur text-xs leading-5 mb-1">Market Cap</p>
             <h2 className="mb-2">$1.23T</h2>
-            <div className="text-green flex flex-row items-center">
-              <BaseIcon width={12} height={12} name="arr-up" />
-              <span className="text-sm">2.10%</span>
-            </div>
+            <div className="w-[60px]">{ChangeBox(2.1)}</div>
           </div>
           <div className="info-market-box mr-3">
             <p className="text-blur text-xs leading-5 mb-1">24h Volume</p>
@@ -29,13 +33,28 @@ export default function page() {
           <div className="info-market-box">
             <p className="text-blur text-xs leading-5 mb-1">Dominance</p>
             <h2 className="mb-2">52.4%</h2>
-            <div className="text-green flex flex-row items-center">
-              <BaseIcon width={12} height={12} name="arr-up" />
-              <span className="text-sm">0.58%</span>
-            </div>
+            <div className="w-[60px]">{ChangeBox(0.58)}</div>
           </div>
         </div>
-        <div className="price-chart text">Price chart</div>
+        <div className="price-chart flex flex-col">
+          <div className="controler-chart">
+            <div className="flex flex-row items-center">
+              <BaseIcon
+                width={16}
+                height={16}
+                name="arr-brk-up"
+                className="mr-2"
+              />
+              <h3 className="leading-[27px]">Price Chart</h3>
+            </div>
+            <div className="box-btn">
+              <Radio onSelect={onSelect} />
+            </div>
+          </div>
+          <div className="flex-1">
+            <Kline />
+          </div>
+        </div>
         <div className="flex flex-row items-center">
           <div className="mr-4 w-[300px]">
             <OrderBook symbol="BTC" />

@@ -2,69 +2,53 @@
 import { useState } from "react";
 import "./Markets.scss";
 import BaseIcon from "@/components/BaseIcon";
+import ChangeBox from "@/components/ChangeBox/ChangeBox";
+import useBinanceSocket from "@/hooks/useBinanceSocket";
+import { _formatNumber, _numberShortener } from "@/lib/global";
+
 type CryptoPair = {
   symbol: string;
-  price: string;
-  change: string;
-  changePercent: number;
-  volume: string;
+  label: string;
   watchList: boolean;
 };
 export default function Markets() {
+  const { dataTicker } = useBinanceSocket({
+    streamType: "ticker",
+  });
   const initialData: CryptoPair[] = [
     {
-      symbol: "BTC/USD",
-      price: "65432.15",
-      change: "+1.92%",
-      changePercent: 1.92,
-      volume: "2845.1M",
+      symbol: "btcusdt",
+      label: "BTC/USD",
       watchList: true,
     },
     {
-      symbol: "ETH/USD",
-      price: "3234.89",
-      change: "-1.38%",
-      changePercent: -1.38,
-      volume: "1234.6M",
+      symbol: "ethusdt",
+      label: "ETH/USD",
       watchList: false,
     },
     {
-      symbol: "BNB/USD",
-      price: "584.32",
-      change: "+2.18%",
-      changePercent: 2.18,
-      volume: "567.9M",
+      symbol: "bnbusdt",
+      label: "BNB/USD",
       watchList: false,
     },
     {
-      symbol: "SOL/USD",
-      price: "142.67",
-      change: "+6.13%",
-      changePercent: 6.13,
-      volume: "345.7M",
+      symbol: "solusdt",
+      label: "SOL/USD",
       watchList: true,
     },
     {
-      symbol: "ADA/USD",
-      price: "0.52",
-      change: "-2.30%",
-      changePercent: -2.3,
-      volume: "234.6M",
+      symbol: "adausdt",
+      label: "ADA/USD",
       watchList: false,
     },
     {
-      symbol: "XRP/USD",
-      price: "0.68",
-      change: "+3.57%",
-      changePercent: 3.57,
-      volume: "456.8M",
+      symbol: "xrpusdt",
+      label: "XRP/USD",
       watchList: false,
     },
   ];
   const [cryptoData, setCryptoData] = useState<CryptoPair[]>(initialData);
-  const [selectSymbol, setSelectSymbol] = useState<string>(
-    cryptoData[0].symbol ?? "",
-  );
+  const [selectSymbol, setSelectSymbol] = useState<string>("btcusdt");
   const getSymbol = (symbol = ""): string => {
     if (!symbol) return "";
     return symbol.replace("/", "");
@@ -89,32 +73,6 @@ export default function Markets() {
       />
     );
   };
-  const changeBox = (changePercent = 0) => {
-    if (changePercent >= 0) {
-      return (
-        <>
-          <div
-            key={changePercent}
-            className="text-green flex flex-row content-center"
-          >
-            <BaseIcon width={12} height={12} name="arr-up" />
-            <span className="text-sm">+{changePercent}</span>
-          </div>
-        </>
-      );
-    }
-    return (
-      <>
-        <div
-          key={changePercent}
-          className="text-red flex flex-row content-center"
-        >
-          <BaseIcon width={12} height={12} name="arr-down" />
-          <span className="text-sm">{changePercent}</span>
-        </div>
-      </>
-    );
-  };
   return (
     <div className="markets text border">
       <div className="title">
@@ -132,24 +90,28 @@ export default function Markets() {
           <tbody>
             {cryptoData.map((crypto, index) => (
               <tr
-                key={crypto.symbol}
+                key={crypto.label}
                 className={selectSymbol === crypto.symbol ? "row-select" : ""}
                 onClick={() => setSelectSymbol(crypto.symbol)}
               >
                 <td className="flex justify-center h-full">
                   {starBox(crypto.watchList, index)}
                   <div className="flex flex-col justify-center h-full">
-                    <p className="text text-base">{crypto.symbol}</p>
+                    <p className="text text-base">{crypto.label}</p>
                     <p className="text-blur text-left text-xs">
-                      {getSymbol(crypto.symbol)}
+                      {getSymbol(crypto.label)}
                     </p>
                   </div>
                 </td>
-                <td className="text-right text-base">${crypto.price}</td>
+                <td className="text-right text-base">
+                  ${_formatNumber(dataTicker[crypto.symbol]?.close)}
+                </td>
                 <td>
                   <div className="flex flex-col content-end items-end pr-2">
-                    {changeBox(crypto.changePercent)}
-                    <p className="text-blur text-xs">${crypto.volume}</p>
+                    {ChangeBox(dataTicker[crypto.symbol]?.change, "", "ml-1")}
+                    <p className="text-blur text-xs">
+                      ${_numberShortener(dataTicker[crypto.symbol]?.volumn)}
+                    </p>
                   </div>
                 </td>
               </tr>

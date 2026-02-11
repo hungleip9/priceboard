@@ -8,7 +8,12 @@ import { usePathname } from "next/navigation";
 import { useContext, useEffect } from "react";
 import { AppContext } from "@/context/appContext";
 import { _formatNumber } from "@/lib/global";
+import ChangeBox from "../ChangeBox/ChangeBox";
+import useBinanceSocket from "@/hooks/useBinanceSocket";
 export default function Header() {
+  const { dataTicker } = useBinanceSocket({
+    streamType: "ticker",
+  });
   const router = useRouter();
   const pathname = usePathname();
   const links = [
@@ -83,12 +88,17 @@ export default function Header() {
           <div className="mr-6">
             <p className="text-blur text-sm">BTCUSD</p>
             <h2 className="text text-2xl font-bold">
-              ${_formatNumber("65432.15")}
+              ${_formatNumber(dataTicker["btcusdt"]?.close)}
             </h2>
           </div>
-          <div className="box-price mr-6">
-            <BaseIcon width={16} height={16} name="arr-up" />
-            <p className="text-green">+1.92%</p>
+          <div className="mr-6">
+            {ChangeBox(
+              dataTicker["btcusdt"]?.change,
+              "box-price",
+              "!text-base",
+              16,
+              true,
+            )}
           </div>
           <div className="flex flex-wrap flex-row content-center">
             <div className="mr-6">

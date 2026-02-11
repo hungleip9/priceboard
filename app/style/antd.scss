@@ -10,3 +10,12 @@
   left: -2px !important;
   background-color: var(--bg-dot) !important;
 }
+// input
+.ant-input-number {
+  background-color: var(--bg-input) !important;
+  color: var(--color-text-input) !important;
+  border: 0.8px solid var(--border-input) !important;
+  .ant-input-number-input {
+    color: var(--color-text-input) !important;
+  }
+}

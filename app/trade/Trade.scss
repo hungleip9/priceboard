@@ -12,5 +12,17 @@
     border-radius: 8px;
     border: 0.8px solid var(--border-default);
     margin-bottom: 15.41px;
+    background-color: var(--bg-mode);
+    .controler-chart {
+      border-bottom: 0.8px solid var(--border-default);
+      padding: 0 16px;
+      height: 54.4px;
+      display: flex;
+      justify-content: space-between;
+      .box-btn {
+        display: flex;
+        align-items: center;
+      }
+    }
   }
 }

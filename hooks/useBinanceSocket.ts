@@ -1,50 +1,78 @@
 // hooks/useBinanceSocket.ts
-'use client';
-
-import { useEffect, useState, useCallback, useMemo } from 'react';
-import { useWebSocket } from './useWebSocket';
-import { TradeData } from '@/types/binance';
+import { useState, useEffect, useRef } from 'react';
+import { Ticker24hr } from '@/types/binance';
 
 interface UseBinanceSocketProps {
-  symbol: string;
-  streamType?: 'trade' | 'kline' | 'depth' | 'ticker';
+  streamType?: string;
 }
-
-export function useBinanceSocket({
-  symbol = 'btcusdt',
-  streamType = 'trade'
-}: UseBinanceSocketProps) {
-
-  // Sử dụng generic type TradeData
-  const { isConnected, lastMessage, send } = useWebSocket<TradeData>(
-    `${process.env.NEXT_PUBLIC_WS_API}`
-  );
-
-  // Subscribe khi kết nối
+interface Data {
+  close: string,
+  open: string,
+  hight: string,
+  low: string,
+  time: number,
+  volumn: string,
+  change: string,
+}
+const useBinanceSocket = ({
+  streamType = "ticker"
+}: UseBinanceSocketProps) => {
+  const [data, setData] = useState<Record<string, Data>>({});
+  const wsRef = useRef<WebSocket | null>(null);
+  const symbols = ["btcusdt", "ethusdt", "bnbusdt", "solusdt", "adausdt", "xrpusdt"]
   useEffect(() => {
-    if (isConnected) {
-      send({
-        method: "SUBSCRIBE",
-        params: [`${symbol.toLowerCase()}@${streamType}`],
-        id: Date.now()
-      });
-    }
-  }, [isConnected, send, symbol, streamType]);
+    // Created WebSocket connection
+    const ws = new WebSocket(`${process.env.NEXT_PUBLIC_WS_API}`);
+    wsRef.current = ws;
 
-  // Cập nhật data khi nhận message
-  const price = useMemo(() => {
-    if (!lastMessage || lastMessage?.e !== 'trade') return null;
-    return lastMessage.p;
-  }, [lastMessage]);
+    ws.onopen = () => {
+      // Created streams từ symbols
+      const streams = symbols.map(s =>
+        `${s.toLowerCase()}@${streamType}`
+      );
+      // Subscribe
+      ws.send(JSON.stringify({
+        method: 'SUBSCRIBE',
+        params: streams,
+        id: 1
+      }));
+    };
 
-  return {
-    price,
-    // Metadata
-    isConnected,
-    symbol: symbol.toUpperCase(),
-    streamType,
+    ws.onmessage = (event) => {
+      try {
+        const message = JSON.parse(event.data) as Ticker24hr;
 
-    // Raw
-    rawMessage: lastMessage
-  };
-}
+        if (message.e === '24hrTicker' && message.s) {
+          const nameSymbol = message.s.toLowerCase() || ''
+          if (!nameSymbol) return
+          const newData = {
+            close: message.c,
+            open: message.o,
+            hight: message.h,
+            low: message.l,
+            time: message.E,
+            volumn: message.q,
+            change: message.P,
+          }
+          setData(prev => ({ ...prev, [nameSymbol]: newData }));
+        }
+      } catch (error) {
+        console.error('Parse error:', error);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    // Cleanup
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
+    };
+  }, [symbols.join(','), streamType]);
+  return { dataTicker: data };
+};
+
+export default useBinanceSocket;
