@@ -2,7 +2,6 @@
 import BuySell from "@/components/BuySell/BuySell";
 import BaseIcon from "@/components/BaseIcon";
 import "./Trade.scss";
-import Kline from "@/components/Kline/Kline";
 import Radio from "@/components/Radio/Radio";
 import ChangeBox from "@/components/ChangeBox/ChangeBox";
 import dynamic from "next/dynamic";
@@ -12,6 +11,9 @@ import useBinanceSocket from "@/hooks/useBinanceSocket";
 import { setKlineInterval } from "@/store/klineInterval";
 import { _formatNumber, _numberShortener } from "@/lib/global";
 import fetchInfoCoint from "@/api/useFetchInfoCoint";
+import { TVChartContainer } from "@/components/TVChartContainer";
+import Kline from "@/components/Kline/Kline";
+import { useState } from "react";
 
 const RecentTrades = dynamic(
   () => import("@/components/RecentTrades/RecentTrades"),
@@ -36,6 +38,27 @@ export default function Page() {
     (state: RootState) => state.klineInterval.value,
   );
   const { info } = fetchInfoCoint({ symbol: symbolStore });
+  const [showTradingview, setShowTradingview] = useState(false);
+
+  const Chart = () => {
+    if (showTradingview) {
+      return (
+        <>
+          <TVChartContainer
+            symbol={symbolStore}
+            interval={interValStore}
+            client_id={"tradingview_trade"}
+            user_id={"pinetree_priceboard"}
+          />
+        </>
+      );
+    }
+    return (
+      <>
+        <Kline interval={interValStore} symbol={symbolStore} />
+      </>
+    );
+  };
   const getMartketCap = () => {
     if (!info || !dataTickerStore[symbolStore]) return "00.00";
     const total =
@@ -80,7 +103,14 @@ export default function Page() {
                 name="arr-brk-up"
                 className="mr-2"
               />
-              <h3 className="leading-[27px]">Price Chart</h3>
+              <h3
+                className="leading-[27px] cursor-pointer"
+                onClick={() => {
+                  setShowTradingview(!showTradingview);
+                }}
+              >
+                Price Chart
+              </h3>
             </div>
             <div className="box-btn">
               <Radio
@@ -90,9 +120,7 @@ export default function Page() {
               />
             </div>
           </div>
-          <div className="w-[616px] h-[432px]">
-            <Kline interval={interValStore} symbol={symbolStore} />
-          </div>
+          <div className="w-[616px] h-[432px]">{Chart()}</div>
         </div>
         <div className="flex flex-row items-center">
           <div className="mr-4 w-[300px]">
