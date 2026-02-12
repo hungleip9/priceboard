@@ -1246,18 +1246,6 @@
     postcss "^8.4.41"
     tailwindcss "4.1.18"
 
-"@tanstack/react-virtual@^3.13.18":
-  version "3.13.18"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.13.18.tgz#9124ee9f08b2ca3c67ffd508dae3732328983362"
-  integrity sha512-dZkhyfahpvlaV0rIKnvQiVoWPyURppl6w4m9IwMDpuIjcJ1sD9YGWrt0wISvgU7ewACXx2Ct46WPgI6qAD4v6A==
-  dependencies:
-    "@tanstack/virtual-core" "3.13.18"
-
-"@tanstack/virtual-core@3.13.18":
-  version "3.13.18"
-  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.13.18.tgz#586e3c1fe08547ee6abf87e8fb7c99087b9c47ff"
-  integrity sha512-Mx86Hqu1k39icq2Zusq+Ey2J6dDWTjDvEv43PJtRCoEYTLyfaPnxIQ6iy7YAOK0NV/qOEmZQ/uCufrppZxTgcg==
-
 "@tybys/wasm-util@^0.10.0", "@tybys/wasm-util@^0.10.1":
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/@tybys/wasm-util/-/wasm-util-0.10.1.tgz#ecddd3205cf1e2d5274649ff0eedd2991ed7f414"
@@ -3336,11 +3324,6 @@ react-redux@9.2.0:
   dependencies:
     "@types/use-sync-external-store" "^0.0.6"
     use-sync-external-store "^1.4.0"
-
-react-window@2.2.6:
-  version "2.2.6"
-  resolved "https://registry.yarnpkg.com/react-window/-/react-window-2.2.6.tgz#00ca174346b5146d3c33a752d888181250c71d9f"
-  integrity sha512-v89O08xRdpCaEuf380B39D1C/0KgUDZA59xft6SVAjzjz/xQxSyXrgDWHymIsYI6TMrqE8WO+G0/PB9AGE8VNA==
 
 react@19.2.3:
   version "19.2.3"

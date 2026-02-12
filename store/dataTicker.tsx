@@ -6,7 +6,8 @@ interface DataTicker {
   low: string;
   time: number;
   volumn: string;
-  change: string;
+  change: number;
+  changePercent: number;
 }
 interface Payload {
   symbol: string;

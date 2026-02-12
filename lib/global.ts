@@ -46,14 +46,15 @@ export function _getFormatTime(timeString: number, getOnly: GetOnly = { second: 
 }
 
 // format 1234000000000.234 => 1,234.23 B
-export function _numberShortener(num: number | string | null, digits: number = 0, hidenSymbol: boolean = false) {
+export function _numberShortener(num: number | string | null | unknown, digits: number = 0, hidenSymbol: boolean = false) {
   if (!num) return "00.00"
   const numberMap = Number(num) || 0
   const lookup = [
     { value: 0, symbol: "" },
     { value: 1, symbol: "" },
     { value: 1e6, symbol: " M" },
-    { value: 1e9, symbol: " B" }
+    { value: 1e9, symbol: " B" },
+    { value: 1e12, symbol: " T" }
   ] as { value: number, symbol: string }[];
   const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
   const item = lookup.slice().reverse().find(function (item) {

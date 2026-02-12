@@ -112,7 +112,7 @@ export default function Markets() {
                 <td>
                   <div className="flex flex-col content-end items-end pr-2">
                     {ChangeBox(
-                      dataTickerStore[crypto.symbol]?.change,
+                      dataTickerStore[crypto.symbol]?.changePercent,
                       "",
                       "ml-1",
                     )}

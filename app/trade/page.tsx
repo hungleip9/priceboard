@@ -7,8 +7,11 @@ import Radio from "@/components/Radio/Radio";
 import ChangeBox from "@/components/ChangeBox/ChangeBox";
 import dynamic from "next/dynamic";
 import { RootState } from "@/store";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import useBinanceSocket from "@/hooks/useBinanceSocket";
+import { setKlineInterval } from "@/store/klineInterval";
+import { _formatNumber, _numberShortener } from "@/lib/global";
+import fetchInfoCoint from "@/api/useFetchInfoCoint";
 
 const RecentTrades = dynamic(
   () => import("@/components/RecentTrades/RecentTrades"),
@@ -23,11 +26,22 @@ const Markets = dynamic(() => import("@/components/Markets/Markets"), {
   ssr: false,
 });
 export default function Page() {
+  const dispatch = useDispatch();
   useBinanceSocket();
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
-
-  const onSelect = (val: string) => {
-    console.log("val: ", val);
+  const dataTickerStore = useSelector(
+    (state: RootState) => state.dataTicker.value,
+  );
+  const interValStore = useSelector(
+    (state: RootState) => state.klineInterval.value,
+  );
+  const { info } = fetchInfoCoint({ symbol: symbolStore });
+  const getMartketCap = () => {
+    if (!info || !dataTickerStore[symbolStore]) return;
+    const total =
+      Number(info.CMCCirculatingSupply) *
+        Number(dataTickerStore[symbolStore].close) || 0;
+    return _numberShortener(total, 2);
   };
   return (
     <div className="w-full h-[1277px] flex flex-row trade-page">
@@ -36,16 +50,20 @@ export default function Page() {
         <div className="flex flex-row items-center mb-4">
           <div className="info-market-box mr-3">
             <p className="text-blur text-sm leading-5 mb-1">Market Cap</p>
-            <h2 className="mb-2">$1.23T</h2>
+            <h2 className="mb-2">${getMartketCap()}</h2>
             <div className="w-[60px]">{ChangeBox(2.1)}</div>
           </div>
           <div className="info-market-box mr-3">
             <p className="text-blur text-sm leading-5 mb-1">24h Volume</p>
-            <h2 className="mb-2">$2.85B</h2>
+            <h2 className="mb-2">
+              ${_numberShortener(dataTickerStore[symbolStore]?.volumn, 2)}
+            </h2>
           </div>
           <div className="info-market-box mr-3">
             <p className="text-blur text-sm leading-5 mb-1">Supply</p>
-            <h2 className="mb-2">19.5M</h2>
+            <h2 className="mb-2">
+              {_numberShortener(info?.CMCCirculatingSupply, 2)}
+            </h2>
           </div>
           <div className="info-market-box">
             <p className="text-blur text-sm leading-5 mb-1">Dominance</p>
@@ -65,11 +83,15 @@ export default function Page() {
               <h3 className="leading-[27px]">Price Chart</h3>
             </div>
             <div className="box-btn">
-              <Radio onSelect={onSelect} />
+              <Radio
+                onSelect={(val: string) => {
+                  dispatch(setKlineInterval(val));
+                }}
+              />
             </div>
           </div>
-          <div className="flex-1">
-            <Kline />
+          <div className="w-[616px] h-[432px]">
+            <Kline interval={interValStore} symbol={symbolStore} />
           </div>
         </div>
         <div className="flex flex-row items-center">

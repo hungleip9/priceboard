@@ -5,17 +5,17 @@ interface Props {
   onSelect: (val: string) => void;
 }
 const timeframeOptions = [
-  { value: "1H", label: "1H" },
-  { value: "4H", label: "4H" },
-  { value: "1D", label: "1D" },
-  { value: "1W", label: "1W" },
+  { value: "1h", label: "1H" },
+  { value: "4h", label: "4H" },
+  { value: "1d", label: "1D" },
+  { value: "1w", label: "1W" },
   { value: "1M", label: "1M" },
   { value: "3M", label: "3M" },
   { value: "1Y", label: "1Y" },
 ];
 
 export default function Radio({ onSelect }: Props) {
-  const [selectedTimeframe, setSelectedTimeframe] = useState("1D");
+  const [selectedTimeframe, setSelectedTimeframe] = useState("1d");
   const handleChange = (val: string) => {
     setSelectedTimeframe(val);
     onSelect(val);

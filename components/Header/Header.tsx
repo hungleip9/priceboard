@@ -99,7 +99,7 @@ export default function Header() {
           </div>
           <div className="mr-6">
             {ChangeBox(
-              dataTickerStore[symbolStore]?.change,
+              dataTickerStore[symbolStore]?.changePercent,
               "box-price",
               "!text-base",
               16,
