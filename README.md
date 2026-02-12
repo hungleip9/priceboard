@@ -17,7 +17,8 @@ các công cụ sử dụng
 - Xây dựng giao diện theo Figma.
 - Ghép dữ liệu realtime từ websocket.
 - Quản lý trạng thái bằng Context API, Redux.
-- Có triển khai Trandingview cho chart.
+- Có tích hợp Trandingview cho chart.
+- Đã triển khai lên VPS
 
 Chưa hoàn thành
 - Tradingview chưa ghép được dữ liệu vì thiếu api để hoàn thiện datafeed.
