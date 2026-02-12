@@ -2,9 +2,9 @@
 import { useEffect, useRef } from 'react';
 import { _createId } from '@/lib/global';
 // store
-import { setDataTicker } from "@/store/dataTicker";
-import { setDataTrade } from "@/store/dataTrade";
-import { setDataDepth } from "@/store/dataDepth";
+import { setDataTicker, resetDataTicker } from "@/store/dataTicker";
+import { setDataTrade, resetDataTrade } from "@/store/dataTrade";
+import { setDataDepth, resetDataDepth } from "@/store/dataDepth";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 const useBinanceSocket = () => {
@@ -63,10 +63,10 @@ const useBinanceSocket = () => {
         if (message.e === "trade") {
           if (Number(message.q) === 0) return
           const newTrade = {
-            id: _createId(),
             price: message.p,
             amount: message.q,
-            time: message.T
+            time: message.T,
+            sell: message.m
           }
           dispatch(setDataTrade(newTrade))
         } else if (message.e === "depthUpdate") {
@@ -113,6 +113,9 @@ const useBinanceSocket = () => {
     };
   }
   useEffect(() => {
+    dispatch(resetDataDepth())
+    dispatch(resetDataTrade())
+    dispatch(resetDataTicker())
     if (!symbolStore) return;
     connect(symbolStore)
 

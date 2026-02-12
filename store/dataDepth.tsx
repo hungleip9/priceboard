@@ -15,9 +15,12 @@ const dataDepth = createSlice({
     setDataDepth: (state, action: PayloadAction<DataDepth>) => {
       state.value = { ...action.payload };
     },
+    resetDataDepth: (state) => {
+      state.value = { asks: [], bids: [] };
+    },
   },
 });
 
-export const { setDataDepth } = dataDepth.actions;
+export const { setDataDepth, resetDataDepth } = dataDepth.actions;
 
 export default dataDepth.reducer;

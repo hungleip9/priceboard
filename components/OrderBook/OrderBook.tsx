@@ -2,7 +2,7 @@ import { _createId, _formatNumber, _getRealNameForSymbol } from "@/lib/global";
 import "./OrderBook.scss";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
-import VirtualList from "@rc-component/virtual-list";
+
 export default function OrderBook() {
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
   const dataDepthStore = useSelector(
@@ -11,6 +11,35 @@ export default function OrderBook() {
   const dataTickerStore = useSelector(
     (state: RootState) => state.dataTicker.value,
   );
+
+  const boxSellBuyRow = (item: string[], type = "row-sell") => {
+    return (
+      <div key={_createId()} className={`${type} relative`}>
+        <p className="text-red text-sm leading-5 w-[75.66px] mr-4">
+          {_formatNumber(item[0], {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </p>
+        <p className="text text-sm leading-5 w-[75.66px] mr-4 text-right">
+          {_formatNumber(item[1], {
+            minimumFractionDigits: 6,
+            maximumFractionDigits: 6,
+          })}
+        </p>
+        <p className="text-blur text-sm leading-5 w-[75.68px] text-right">
+          {_formatNumber(item[2], {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </p>
+        <span
+          className={`absolute top-0 right-0 h-full bg-red`}
+          style={{ width: item[3] }}
+        ></span>
+      </div>
+    );
+  };
   return (
     <div className="order-book">
       <div className="title">
@@ -26,39 +55,7 @@ export default function OrderBook() {
         <p className="text-blur text-xs leading-4 text-right">Total</p>
       </div>
       <div className="box-sell">
-        <VirtualList
-          data={dataDepthStore.asks}
-          height={220}
-          itemHeight={24}
-          itemKey="id"
-        >
-          {(item: string[]) => (
-            <div key={_createId()} className="row-sell relative">
-              <p className="text-red text-sm leading-5 w-[75.66px] mr-4">
-                {_formatNumber(item[0], {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </p>
-              <p className="text text-sm leading-5 w-[75.66px] mr-4 text-right">
-                {_formatNumber(item[1], {
-                  minimumFractionDigits: 6,
-                  maximumFractionDigits: 6,
-                })}
-              </p>
-              <p className="text-blur text-sm leading-5 w-[75.68px] text-right">
-                {_formatNumber(item[2], {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </p>
-              <span
-                className={`absolute top-0 right-0 h-full bg-red`}
-                style={{ width: item[3] }}
-              ></span>
-            </div>
-          )}
-        </VirtualList>
+        {dataDepthStore.asks.map((item) => boxSellBuyRow(item))}
       </div>
       <div className="price-box">
         <h4 className="leading-6">
@@ -66,39 +63,7 @@ export default function OrderBook() {
         </h4>
       </div>
       <div className="box-buy mb-3.5">
-        <VirtualList
-          data={dataDepthStore.bids}
-          height={220}
-          itemHeight={24}
-          itemKey="id"
-        >
-          {(item: string[]) => (
-            <div key={_createId()} className="row-buy relative">
-              <p className="text-green text-sm leading-5 w-[75.66px] mr-4">
-                {_formatNumber(item[0], {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </p>
-              <p className="text text-sm leading-5 w-[75.66px] mr-4 text-right">
-                {_formatNumber(item[1], {
-                  minimumFractionDigits: 6,
-                  maximumFractionDigits: 6,
-                })}
-              </p>
-              <p className="text-blur text-sm leading-5 w-[75.68px] text-right">
-                {_formatNumber(item[2], {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </p>
-              <span
-                className={`absolute top-0 right-0 h-full bg-green`}
-                style={{ width: item[3] }}
-              ></span>
-            </div>
-          )}
-        </VirtualList>
+        {dataDepthStore.bids.map((item) => boxSellBuyRow(item, "row-buy"))}
       </div>
     </div>
   );

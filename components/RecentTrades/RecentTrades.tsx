@@ -1,18 +1,12 @@
 import {
+  _createId,
   _formatNumber,
   _getFormatTime,
   _getRealNameForSymbol,
 } from "@/lib/global";
 import "./RecentTrades.scss";
-import VirtualList from "@rc-component/virtual-list";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
-interface DataTrade {
-  id: string;
-  price: string;
-  amount: string;
-  time: number;
-}
 export default function RecentTrades() {
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
   const dataTradeStore = useSelector(
@@ -35,15 +29,13 @@ export default function RecentTrades() {
         </p>
       </div>
       <div className="overflow-auto flex-1">
-        <VirtualList
-          data={dataTradeStore}
-          height={510}
-          itemHeight={32}
-          itemKey="id"
-        >
-          {(item: DataTrade) => (
-            <div key={item.id} className="row-item">
-              <p className="text-green text-base leading-6 w-[101.9px] text-center">
+        {dataTradeStore.map((item) => {
+          const colorClass = item.sell ? "text-red" : "text-green";
+          return (
+            <div key={_createId()} className="row-item">
+              <p
+                className={`${colorClass} text-base leading-6 w-[101.9px] text-center`}
+              >
                 {_formatNumber(item.price)}
               </p>
               <p className="text text-base leading-6 w-[101.9px] text-center">
@@ -59,8 +51,8 @@ export default function RecentTrades() {
                 })}
               </p>
             </div>
-          )}
-        </VirtualList>
+          );
+        })}
       </div>
     </div>
   );

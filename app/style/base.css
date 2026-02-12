@@ -27,8 +27,7 @@
   --border-input: #e2e8f0;
   --color-text-input: #64748b;
   /* scroll */
-  --color-scroll: #14141f;
-  --bg-color-scroll: #f8f9fa;
+  --color-scroll: #bfbfbf;
 }
 .dark {
   --text-color-default: #f1f2f5;
@@ -59,8 +58,7 @@
   --border-input: #1f2031;
   --color-text-input: #6b7280;
   /* scroll */
-  --color-scroll: #f8f9fa;
-  --bg-color-scroll: #14141f;
+  --color-scroll: #4f5867;
 }
 h1,
 h2,
@@ -94,7 +92,7 @@ h4 {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: var(--bg-color-scroll);
+  background: transparent;
 }
 
 /* Handle */

@@ -25,9 +25,12 @@ const dataTicker = createSlice({
       const { symbol, value } = action.payload;
       state.value[symbol] = value;
     },
+    resetDataTicker: (state) => {
+      state.value = {};
+    },
   },
 });
 
-export const { setDataTicker } = dataTicker.actions;
+export const { setDataTicker, resetDataTicker } = dataTicker.actions;
 
 export default dataTicker.reducer;
