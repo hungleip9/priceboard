@@ -34,9 +34,12 @@
   }
   .content {
     padding: 16px 16px 0 16px;
+    height: 656.73px;
     .available-balance {
-      padding: 12px 12px 0px 12px;
+      padding: 12px;
       margin-bottom: 16px;
+      background-color: var(--bg-box-important);
+      height: 88px;
     }
     .box-price {
       height: 64px;
@@ -47,6 +50,7 @@
       margin-bottom: 16px;
     }
     .amount-slice {
+      height: 87.99;
       .btn-slice-box {
         display: flex;
         flex-direction: row;
@@ -55,7 +59,8 @@
       }
     }
     .total-box {
-      padding: 12px 12px 0 12px;
+      padding: 12px;
+      background-color: var(--bg-box-important);
     }
   }
 }

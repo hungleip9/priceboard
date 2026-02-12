@@ -4,8 +4,14 @@ import "./BuySell.scss";
 import BaseIcon from "@/components/BaseIcon";
 import Button from "@/components/Button/Buttom";
 import { InputNumber, Slider } from "antd";
-import { _formatNumber } from "@/lib/global";
+import { _formatNumber, _numberFormatDefault } from "@/lib/global";
+import { RootState } from "@/store";
+import { useSelector } from "react-redux";
 export default function BuySell() {
+  const symbolStore = useSelector((state: RootState) => state.symbol.value);
+  const dataTickerStore = useSelector(
+    (state: RootState) => state.dataTicker.value,
+  );
   const [buySell, setBuySell] = useState("buy");
   const tab = () => {
     return (
@@ -78,7 +84,7 @@ export default function BuySell() {
               name="wallet-mini"
               className="mr-2"
             />
-            <p className="text-blur">Available Balance</p>
+            <p className="text-blur text-xs">Available Balance</p>
           </div>
           <div className="inline-block w-[117.1px] h-[35.99px]">
             <p className="text-blur text-xs">USD</p>
@@ -118,11 +124,13 @@ export default function BuySell() {
           />
         </div>
         <div className="amount-slice mb-4">
-          <div className="flex flex-row justify-between">
-            <p className="text text-sm">Amount</p>
-            <p>{formData.amountPercent}%</p>
+          <div className="flex flex-row justify-between mb-3">
+            <p className="text-sm">Amount</p>
+            <p className="text-blue text-sm leading-5">
+              {formData.amountPercent}%
+            </p>
           </div>
-          <div className="h-[16px]">
+          <div className="h-[16px] mb-3">
             <Slider
               styles={{
                 rail: {
@@ -182,8 +190,10 @@ export default function BuySell() {
           <div className="flex flex-row justify-between items-center mb-2">
             <p className="text-blur text-sm">Total</p>
             <div>
-              <p className="text font-bold text-base">$5099.98</p>
-              <p className="text-blur text-xs">USD</p>
+              <p className="text font-bold text-base">
+                ${_numberFormatDefault(formData.price * formData.amount) || "0"}
+              </p>
+              <p className="text-blur text-xs text-right">USD</p>
             </div>
           </div>
           <div className="flex flex-row h-[40.78px]">
@@ -195,7 +205,8 @@ export default function BuySell() {
               className="mr-[3px] content-start pt-[4px]"
             />
             <p className="text-blur text-xs">
-              Limit order will execute when price reaches $65,432.15
+              Limit order will execute when price reaches $
+              {_formatNumber(dataTickerStore[symbolStore]?.close)}
             </p>
           </div>
         </div>

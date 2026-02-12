@@ -26,7 +26,6 @@ export default function useFetchInfoCoint({ symbol }: Props) {
 
         const response = await fetch(url);
         const res = await response.json();
-        console.log('res: ', res)
         setInfo(res[0])
         setError(null);
       } catch (err) {

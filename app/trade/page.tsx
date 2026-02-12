@@ -37,11 +37,11 @@ export default function Page() {
   );
   const { info } = fetchInfoCoint({ symbol: symbolStore });
   const getMartketCap = () => {
-    if (!info || !dataTickerStore[symbolStore]) return;
+    if (!info || !dataTickerStore[symbolStore]) return "00.00";
     const total =
       Number(info.CMCCirculatingSupply) *
         Number(dataTickerStore[symbolStore].close) || 0;
-    return _numberShortener(total, 2);
+    return _numberShortener(total, 2) || "00.00";
   };
   return (
     <div className="w-full h-[1277px] flex flex-row trade-page">
@@ -50,24 +50,24 @@ export default function Page() {
         <div className="flex flex-row items-center mb-4">
           <div className="info-market-box mr-3">
             <p className="text-blur text-sm leading-5 mb-1">Market Cap</p>
-            <h2 className="mb-2">${getMartketCap()}</h2>
+            <h2 className="mb-2 whitespace-nowrap">${getMartketCap()}</h2>
             <div className="w-[60px]">{ChangeBox(2.1)}</div>
           </div>
           <div className="info-market-box mr-3">
             <p className="text-blur text-sm leading-5 mb-1">24h Volume</p>
-            <h2 className="mb-2">
+            <h2 className="mb-2 whitespace-nowrap">
               ${_numberShortener(dataTickerStore[symbolStore]?.volumn, 2)}
             </h2>
           </div>
           <div className="info-market-box mr-3">
             <p className="text-blur text-sm leading-5 mb-1">Supply</p>
-            <h2 className="mb-2">
+            <h2 className="mb-2 whitespace-nowrap">
               {_numberShortener(info?.CMCCirculatingSupply, 2)}
             </h2>
           </div>
           <div className="info-market-box">
             <p className="text-blur text-sm leading-5 mb-1">Dominance</p>
-            <h2 className="mb-2">52.4%</h2>
+            <h2 className="mb-2 whitespace-nowrap">52.4%</h2>
             <div className="w-[60px]">{ChangeBox(0.58)}</div>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default function Page() {
           <div className="mr-4 w-[300px]">
             <OrderBook key={`OrderBook-${symbolStore}`} />
           </div>
-          <div className="w-[299px]">
+          <div className="w-[300px]">
             <RecentTrades key={`RecentTrades-${symbolStore}`} />
           </div>
         </div>

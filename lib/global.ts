@@ -1,3 +1,19 @@
+export function _numberFormatDefault(number: number | string, getDecimal: boolean = false) {
+  if (!number) return "";
+  number = String(number); // chuyển về string
+  if (number.indexOf(".") === -1) {
+    number += ".00";
+  }
+  const parts = number.split(".");
+  let integerPart = parts[0];
+  const decimalPart = parts[1];
+  // thêm dấu ',' vào giữa các phần ngàn của phần số nguyên
+  integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if ((!decimalPart || decimalPart === "00") && !getDecimal) {
+    return integerPart;
+  }
+  return integerPart + "." + decimalPart;
+}
 export function _formatNumber(
   value: number | string | null | undefined,
   options: Intl.NumberFormatOptions = {}

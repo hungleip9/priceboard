@@ -2,7 +2,7 @@
   background-color: var(--bg-mode);
   border: 0.8px solid var(--border-default);
   border-radius: 8px;
-  height: 612px;
+  height: 566px;
   .title {
     height: 43.8px;
     border-bottom: 0.8px solid var(--border-default);
@@ -18,9 +18,8 @@
   .box-sell,
   .box-buy {
     padding: 0 15.2px 0.8px 0;
-    margin-bottom: 11.41px;
-    overflow-y: auto;
-    height: 225px;
+    overflow-y: hidden;
+    height: 220px;
     .row-sell,
     .row-buy {
       padding: 0 12px;
@@ -30,9 +29,11 @@
       margin-bottom: 4px;
     }
   }
+  .box-buy {
+    margin-bottom: 0;
+  }
   .price-box {
-    height: 42px;
-    margin-bottom: 10px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;

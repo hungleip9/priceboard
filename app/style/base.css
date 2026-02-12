@@ -10,6 +10,7 @@
   --border-default: #e2e8f0;
   --bg-row-select: #e2e8f080;
   --border-row-table: #e2e8f080;
+  --text-blue: #2563eb;
   /* button */
   --bg-button-default: #f1f5f9;
   --color-button-default: #0f172a;
@@ -28,6 +29,7 @@
   --color-text-input: #64748b;
   /* scroll */
   --color-scroll: #bfbfbf;
+  --bg-box-important: #ffffff;
 }
 .dark {
   --text-color-default: #f1f2f5;
@@ -41,6 +43,7 @@
   --border-default: #1f2031;
   --bg-row-select: #1a1d2a;
   --border-row-table: #1f203180;
+  --text-blue: #3b82f6;
   /* button */
   --bg-button-default: #1f2031;
   --color-button-default: #f1f2f5;
@@ -59,6 +62,7 @@
   --color-text-input: #6b7280;
   /* scroll */
   --color-scroll: #4f5867;
+  --bg-box-important: #1f20314d;
 }
 h1,
 h2,

@@ -18,8 +18,8 @@ const useBinanceSocket = () => {
   const wsRef = useRef<WebSocket | null>(null);
   const symbols = ["btcusdt", "ethusdt", "bnbusdt", "solusdt", "adausdt", "xrpusdt"]
   const handleDepthUpdate = (depthData: { asks: string[][], bids: string[][] }) => {
-    const arrAsks = depthData.asks.reverse() || []
-    const arrBids = depthData.bids || []
+    const arrAsks = depthData.asks.reverse().slice(-8) || []
+    const arrBids = depthData.bids.slice(0, 8) || []
     const totalAsksQuantity = arrAsks.reduce((sum: number, ask: string[]) => {
       return sum + Number(ask[1]);
     }, 0);
