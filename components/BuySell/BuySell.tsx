@@ -37,17 +37,27 @@ export default function BuySell() {
       </>
     );
   };
+
   const [formData, setFormData] = useState({
     price: 0,
-    amount: 0,
-    amountPercent: 30,
+    amount: 0.25,
+    amountPercent: 50,
   });
-  const handleChange = (value: string | number | null, key = "") => {
-    setFormData((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
+  const handleChange = (
+    value: string | number | null,
+    key: "price" | "amount" | "amountPercent",
+  ) => {
+    const newData = { ...formData };
+    newData[key] = Number(value);
+    if (key === "amount") {
+      newData.amountPercent = (Number(value) / 0.5) * 100;
+    }
+    if (key === "amountPercent") {
+      newData.amount = (Number(value) / 100) * 0.5;
+    }
+    setFormData({ ...newData });
   };
+
   return (
     <div className="buy-sell-box text border">
       <div className="tabs">{tab()}</div>

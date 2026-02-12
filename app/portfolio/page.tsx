@@ -1,9 +1,8 @@
 import Link from "next/link";
-import useBinanceSocket from "@/hooks/useBinanceSocket";
 export default function Home() {
   return (
     <div>
-      <p className="text">Page</p>
+      <p className="text">Portfolio</p>
       <Link
         key="/trade"
         href="/trade"
