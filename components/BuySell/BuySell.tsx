@@ -43,7 +43,10 @@ export default function BuySell() {
       </>
     );
   };
-
+  const wallet = {
+    monney: 10000,
+    coin: 0.5,
+  };
   const [formData, setFormData] = useState({
     price: 0,
     amount: 0.25,
@@ -62,6 +65,12 @@ export default function BuySell() {
       newData.amount = (Number(value) / 100) * 0.5;
     }
     setFormData({ ...newData });
+  };
+  const checkDisabled = () => {
+    if (buySell === "buy" && formData.price * formData.amount > wallet.monney)
+      return true;
+    if (buySell === "sell" && formData.amount > wallet.coin) return true;
+    return false;
   };
 
   return (
@@ -88,11 +97,15 @@ export default function BuySell() {
           </div>
           <div className="inline-block w-[117.1px] h-[35.99px]">
             <p className="text-blur text-xs">USD</p>
-            <p className="text font-bold text-sm">${_formatNumber(10000)}</p>
+            <p className="text font-bold text-sm">
+              ${_formatNumber(wallet.monney)}
+            </p>
           </div>
           <div className="inline-block w-[117.1px] h-[35.99px]">
             <p className="text-blur text-xs">BTC</p>
-            <p className="text font-bold text-sm">0.500000</p>
+            <p className="text font-bold text-sm">
+              {_formatNumber(wallet.coin)}
+            </p>
           </div>
         </div>
         <div className="box-price">
@@ -127,7 +140,11 @@ export default function BuySell() {
           <div className="flex flex-row justify-between mb-3">
             <p className="text-sm">Amount</p>
             <p className="text-blue text-sm leading-5">
-              {formData.amountPercent}%
+              {_formatNumber(formData.amountPercent, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              })}
+              %
             </p>
           </div>
           <div className="h-[16px] mb-3">
@@ -213,6 +230,7 @@ export default function BuySell() {
         <Button
           className="w-full h-[48px] mb-4"
           type={buySell === "buy" ? "success" : "danger"}
+          disabled={checkDisabled()}
         >
           <p className="text-base font-bold leading-6">
             {buySell === "buy" ? "Buy" : "Sell"} BTC

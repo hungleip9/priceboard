@@ -67,7 +67,7 @@ export default function Page() {
     return _numberShortener(total, 2) || "00.00";
   };
   return (
-    <div className="w-full h-[1277px] flex flex-row trade-page">
+    <div className="w-full flex flex-row trade-page">
       <Markets />
       <div className="w-[618px] mr-[16.4px]">
         <div className="flex flex-row items-center mb-4">

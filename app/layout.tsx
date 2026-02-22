@@ -28,7 +28,7 @@ export default async function RootLayout({
         <AntdRegistry>
           <AppProvider initialTheme={theme as "light" | "dark"}>
             <Header />
-            <div className="flex-1 overflow-auto">
+            <div>
               <div className="content">{children}</div>
               <Footer />
             </div>

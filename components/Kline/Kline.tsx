@@ -7,12 +7,14 @@ import {
   FormatDateParams,
   KLineData,
   registerYAxis,
+  registerIndicator,
 } from "klinecharts";
 import { _formatNumber, _getFormatTime } from "@/lib/global";
 import fetDataKline from "@/api/useFetchDataKline";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { AppContext } from "@/context/appContext";
+import { VOL_CUSTOM } from "@/constants/CandleStick/indicators";
 
 interface Props {
   interval: string;
@@ -24,6 +26,7 @@ export default function Kline({ interval = "1d", symbol }: Props) {
   };
   const upColor = mode === "dark" ? "#22c55e" : "#059669";
   const downColor = mode === "dark" ? "#ef4444" : "#dc2626";
+  const colorGrid = mode === "dark" ? "#252930" : "#e5e6e9";
   const chartRef = useRef<Nullable<Chart>>(null);
   const newLine = useSelector((state: RootState) => state.klineData.value);
   const subscriptionCallback = useRef<((bar: KLineData) => void) | null>(null);
@@ -92,7 +95,7 @@ export default function Kline({ interval = "1d", symbol }: Props) {
           show: true,
         },
         tooltip: {
-          showRule: "none", // 'none' : 'always'
+          showRule: "always", // 'none' : 'always'
           showType: "standard",
           rect: {
             // 'fixed' | 'pointer'
@@ -104,6 +107,31 @@ export default function Kline({ interval = "1d", symbol }: Props) {
             borderRadius: 4,
             borderSize: 1,
             borderColor: "#eee",
+          },
+          title: {
+            show: false,
+          },
+          legend: {
+            size: 12,
+            family: "Helvetica Neue",
+            weight: "normal",
+            color: "#76808F",
+            marginLeft: 8,
+            marginTop: 4,
+            marginRight: 8,
+            marginBottom: 4,
+            defaultValue: "n/a",
+            // e.g.
+            // [{ title: 'time', value: '{time}' }, { title: 'close', value: '{close}' }]
+            // [{ title: { text: 'time', color: '#fff' }, value: { text: '{time}', color: '#fff' } }, { title: 'close', value: '{close}' }]
+            template: [
+              { title: "", value: "{time}" },
+              { title: "O: ", value: "{open}" },
+              { title: "H: ", value: "{high}" },
+              { title: "L: ", value: "{low}" },
+              { title: "C: ", value: "{close}" },
+              { title: "V: ", value: "{volume}" },
+            ],
           },
         },
       },
@@ -160,7 +188,7 @@ export default function Kline({ interval = "1d", symbol }: Props) {
         },
         tooltip: {
           // 'always' | 'follow_cross' | 'none'
-          showRule: "none",
+          showRule: "always",
           showType: "standard",
         },
       },
@@ -202,6 +230,18 @@ export default function Kline({ interval = "1d", symbol }: Props) {
           show: false,
         },
       },
+      separator: {
+        color: colorGrid,
+      },
+    });
+  }
+  async function registerIndicatorKline() {
+    if (!chartRef.current) return;
+    const volCustom = VOL_CUSTOM();
+    // @ts-expect-error - VOL_CUSTOM type mismatch with IndicatorTemplate
+    await registerIndicator(volCustom);
+    chartRef.current.createIndicator("VOL_CUSTOM", false, {
+      height: 100,
     });
   }
   const initData = () => {
@@ -226,6 +266,7 @@ export default function Kline({ interval = "1d", symbol }: Props) {
     handleSetDataLoader();
     setFormat();
     setStylesKline();
+    registerIndicatorKline();
   };
 
   useEffect(() => {

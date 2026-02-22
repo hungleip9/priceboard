@@ -6,6 +6,7 @@ interface Props {
   color?: string;
   colorText?: string;
   type?: "prime" | "success" | "danger" | "default" | "warning";
+  disabled?: boolean;
   onClick?: () => void;
 }
 export default function Button({
@@ -14,6 +15,7 @@ export default function Button({
   color = "",
   colorText = "",
   type = "prime",
+  disabled = false,
   onClick,
 }: Props) {
   return (
@@ -23,6 +25,7 @@ export default function Button({
         color: colorText,
         background: color,
       }}
+      disabled={disabled}
       onClick={onClick}
     >
       {children}

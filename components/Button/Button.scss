@@ -6,6 +6,11 @@
     opacity: 0.7;
   }
 }
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 .prime {
   color: var(--color-button-prime);
   background-color: var(--bg-button-prime);
