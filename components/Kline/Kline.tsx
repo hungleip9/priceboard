@@ -34,7 +34,7 @@ export default function Kline({ interval = "1d", symbol }: Props) {
 
   registerYAxis({
     name: "customYAxisBasic",
-    displayValueToText: (value) => `$${value}`,
+    displayValueToText: (value) => `$${_formatNumber(value, 2)}`,
   });
 
   fetDataKline({ symbol: symbol, interval: interval, limit: 50 });
@@ -121,9 +121,6 @@ export default function Kline({ interval = "1d", symbol }: Props) {
             marginRight: 8,
             marginBottom: 4,
             defaultValue: "n/a",
-            // e.g.
-            // [{ title: 'time', value: '{time}' }, { title: 'close', value: '{close}' }]
-            // [{ title: { text: 'time', color: '#fff' }, value: { text: '{time}', color: '#fff' } }, { title: 'close', value: '{close}' }]
             template: [
               { title: "", value: "{time}" },
               { title: "O: ", value: "{open}" },

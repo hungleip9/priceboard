@@ -16,22 +16,13 @@ export default function OrderBook() {
     return (
       <div key={_createId()} className={`${type} relative`}>
         <p className="text-red text-sm leading-5 w-[75.66px] mr-4">
-          {_formatNumber(item[0], {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
+          {_formatNumber(item[0], 2)}
         </p>
         <p className="text text-sm leading-5 w-[75.66px] mr-4 text-right">
-          {_formatNumber(item[1], {
-            minimumFractionDigits: 6,
-            maximumFractionDigits: 6,
-          })}
+          {_formatNumber(item[1], 6)}
         </p>
         <p className="text-blur text-sm leading-5 w-[75.68px] text-right">
-          {_formatNumber(item[2], {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}
+          {_formatNumber(item[2], 2)}
         </p>
         <span
           className={`absolute top-0 right-0 h-full bg-red`}

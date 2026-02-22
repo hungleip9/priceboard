@@ -16,14 +16,15 @@ export function _numberFormatDefault(number: number | string, getDecimal: boolea
 }
 export function _formatNumber(
   value: number | string | null | undefined,
-  options: Intl.NumberFormatOptions = {}
+  digits = 3,
+  options: Intl.NumberFormatOptions = {},
 ): string {
   if (value == null) return "00.00";
   const num = typeof value === "string" ? Number(value) : value;
   if (isNaN(num) || !isFinite(num)) return "00.00";
   return new Intl.NumberFormat("en-US", {
-    minimumFractionDigits: 3,
-    maximumFractionDigits: 3,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
     ...options,
   }).format(num);
 }

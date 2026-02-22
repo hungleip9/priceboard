@@ -140,11 +140,7 @@ export default function BuySell() {
           <div className="flex flex-row justify-between mb-3">
             <p className="text-sm">Amount</p>
             <p className="text-blue text-sm leading-5">
-              {_formatNumber(formData.amountPercent, {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              })}
-              %
+              {_formatNumber(formData.amountPercent, 0)}%
             </p>
           </div>
           <div className="h-[16px] mb-3">
