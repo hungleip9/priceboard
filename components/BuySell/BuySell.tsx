@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./BuySell.scss";
 import BaseIcon from "@/components/BaseIcon";
 import Button from "@/components/Button/Buttom";
@@ -12,6 +12,7 @@ export default function BuySell() {
   const dataTickerStore = useSelector(
     (state: RootState) => state.dataTicker.value,
   );
+  const hasSetInitialPrice = useRef(false);
   const [buySell, setBuySell] = useState("buy");
   const tab = () => {
     return (
@@ -49,8 +50,8 @@ export default function BuySell() {
   };
   const [formData, setFormData] = useState({
     price: 0,
-    amount: 0.25,
-    amountPercent: 50,
+    amount: 0,
+    amountPercent: 0,
   });
   const handleChange = (
     value: string | number | null,
@@ -59,10 +60,22 @@ export default function BuySell() {
     const newData = { ...formData };
     newData[key] = Number(value);
     if (key === "amount") {
-      newData.amountPercent = (Number(value) / 0.5) * 100;
+      if (buySell === "sell") {
+        newData.amountPercent = (Number(value) / wallet.coin) * 100;
+      } else {
+        const soChia = Number(value) * formData.price;
+        newData.amountPercent = (soChia / wallet.monney) * 100;
+      }
     }
     if (key === "amountPercent") {
-      newData.amount = (Number(value) / 100) * 0.5;
+      if (buySell === "sell") {
+        newData.amount = (Number(value) / 100) * wallet.coin;
+      } else {
+        const soChia = wallet.monney * (Number(value) / 100);
+        newData.amount = formData.price
+          ? Number((soChia / formData.price).toFixed(2))
+          : 0;
+      }
     }
     setFormData({ ...newData });
   };
@@ -72,7 +85,24 @@ export default function BuySell() {
     if (buySell === "sell" && formData.amount > wallet.coin) return true;
     return false;
   };
-
+  useEffect(() => {
+    if (dataTickerStore[symbolStore]?.close && !hasSetInitialPrice.current) {
+      const initialPrice = dataTickerStore[symbolStore]?.close;
+      setFormData(
+        (prev: { price: number; amount: number; amountPercent: number }) => {
+          if (prev.price !== 0) {
+            hasSetInitialPrice.current = true;
+            return prev;
+          }
+          hasSetInitialPrice.current = true;
+          return {
+            ...prev,
+            price: Number(initialPrice),
+          };
+        },
+      );
+    }
+  }, [dataTickerStore[symbolStore]?.close, symbolStore]);
   return (
     <div className="buy-sell-box text border">
       <div className="tabs">{tab()}</div>
