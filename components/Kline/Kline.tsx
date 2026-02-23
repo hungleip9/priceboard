@@ -285,10 +285,12 @@ export default function Kline({ interval = "1d", symbol }: Props) {
 
   useEffect(() => {
     // re render ws
-    const initDataKline = dataStore[`${symbol}-${interval}`] || [];
-    if (!subscriptionCallback.current || !newLine || !initDataKline.length)
-      return;
-    subscriptionCallback.current(newLine);
+    if (!chartRef.current) return;
+    const dataList = chartRef.current.getDataList();
+    if (!subscriptionCallback.current || !newLine || !dataList.length) return;
+    const volume = dataList[dataList.length - 1].volume || 0;
+    const newVolume = Number(newLine.volume) + volume;
+    subscriptionCallback.current({ ...newLine, volume: newVolume });
   }, [newLine]);
 
   return <div id="klinecharts" className="w-full h-full" />;

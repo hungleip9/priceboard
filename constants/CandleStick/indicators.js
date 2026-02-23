@@ -20,7 +20,7 @@ export function VOL_CUSTOM() {
           legends: [
             {
               title: "",
-              value: { text: _numberShortener(data.volume, 6), color },
+              value: { text: data.volume, color },
             },
           ],
         };
