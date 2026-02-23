@@ -80,6 +80,7 @@ export default function BuySell() {
     setFormData({ ...newData });
   };
   const checkDisabled = () => {
+    if (!formData.price || !formData.amount) return true;
     if (buySell === "buy" && formData.price * formData.amount > wallet.monney)
       return true;
     if (buySell === "sell" && formData.amount > wallet.coin) return true;
@@ -144,6 +145,7 @@ export default function BuySell() {
             min={0}
             suffix="USD"
             name="price"
+            stringMode
             value={formData.price}
             controls={false}
             style={{ width: "100%" }}
@@ -158,6 +160,7 @@ export default function BuySell() {
             min={0}
             suffix="BTC"
             name="amount"
+            stringMode
             value={formData.amount}
             controls={false}
             style={{ width: "100%" }}
