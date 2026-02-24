@@ -12,7 +12,6 @@ import { setKlineInterval } from "@/store/klineInterval";
 import { _formatNumber, _numberShortener } from "@/lib/global";
 import fetchInfoCoint from "@/api/useFetchInfoCoint";
 import Kline from "@/components/Kline/Kline";
-import { useState } from "react";
 
 const RecentTrades = dynamic(
   () => import("@/components/RecentTrades/RecentTrades"),
