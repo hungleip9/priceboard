@@ -7,11 +7,20 @@ import {
 import "./RecentTrades.scss";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
+import { useMemo } from "react";
+import { useThrottle } from "@/hooks/useThrottle";
 export default function RecentTrades() {
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
   const dataTradeStore = useSelector(
     (state: RootState) => state.dataTrade.value,
   );
+  const debouncedDataTradeStore = useThrottle(dataTradeStore, {
+    delay: 1000,
+    mode: "leading",
+  });
+  const dataTrade = useMemo(() => {
+    return dataTradeStore;
+  }, [debouncedDataTradeStore]);
   return (
     <div className="recent-trades flex flex-col">
       <div className="title">
@@ -29,7 +38,7 @@ export default function RecentTrades() {
         </p>
       </div>
       <div className="overflow-auto flex-1">
-        {dataTradeStore.map((item) => {
+        {dataTrade.map((item) => {
           const colorClass = item.sell ? "text-red" : "text-green";
           return (
             <div key={_createId()} className="row-item">

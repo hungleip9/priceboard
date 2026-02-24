@@ -1,6 +1,21 @@
+"use client";
 import Link from "next/link";
-import useBinanceSocket from "@/hooks/useBinanceSocket";
+import { useEffect, useState } from "react";
 export default function Home() {
+  const [time, setTime] = useState(new Date());
+  useEffect(() => {
+    console.log("mount");
+    const timeInterVal = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return () => {
+      console.log("unMout");
+      clearInterval(timeInterVal);
+    };
+  }, []);
+  useEffect(() => {
+    console.log("update: ", time);
+  }, [time]);
   return (
     <div>
       <p className="text">Page</p>

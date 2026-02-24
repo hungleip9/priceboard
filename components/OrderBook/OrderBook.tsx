@@ -2,6 +2,8 @@ import { _createId, _formatNumber, _getRealNameForSymbol } from "@/lib/global";
 import "./OrderBook.scss";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
+import { useMemo } from "react";
+import { useThrottle } from "@/hooks/useThrottle";
 
 export default function OrderBook() {
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
@@ -11,6 +13,14 @@ export default function OrderBook() {
   const dataTickerStore = useSelector(
     (state: RootState) => state.dataTicker.value,
   );
+
+  const debouncedDataDepthStore = useThrottle(dataDepthStore, {
+    delay: 1000,
+    mode: "leading",
+  });
+  const dataDepth = useMemo(() => {
+    return dataDepthStore;
+  }, [debouncedDataDepthStore]);
 
   const boxSellBuyRow = (item: string[], type = "row-sell") => {
     return (
@@ -46,7 +56,7 @@ export default function OrderBook() {
         <p className="text-blur text-xs leading-4 text-right">Total</p>
       </div>
       <div className="box-sell">
-        {dataDepthStore.asks.map((item) => boxSellBuyRow(item))}
+        {dataDepth.asks.map((item) => boxSellBuyRow(item))}
       </div>
       <div className="price-box">
         <h4 className="leading-6">
@@ -54,7 +64,7 @@ export default function OrderBook() {
         </h4>
       </div>
       <div className="box-buy mb-3.5">
-        {dataDepthStore.bids.map((item) => boxSellBuyRow(item, "row-buy"))}
+        {dataDepth.bids.map((item) => boxSellBuyRow(item, "row-buy"))}
       </div>
     </div>
   );

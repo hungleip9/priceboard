@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useContext } from "react";
+import { useEffect, useRef, useContext, useCallback } from "react";
 import {
   init,
   Nullable,
@@ -15,6 +15,7 @@ import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { AppContext } from "@/context/appContext";
 import { VOL_CUSTOM } from "@/constants/CandleStick/indicators";
+import { useThrottle } from "@/hooks/useThrottle";
 
 interface Props {
   interval: string;
@@ -265,6 +266,20 @@ export default function Kline({ interval = "1d", symbol }: Props) {
     setStylesKline();
     registerIndicatorKline();
   };
+  const updateChart = useCallback(() => {
+    if (!chartRef.current) return;
+    const dataList = chartRef.current.getDataList();
+    if (!subscriptionCallback.current || !newLine || !dataList.length) return;
+
+    const volume = dataList[dataList.length - 1].volume || 0;
+    const newVolume = Number(newLine.volume) + volume;
+    subscriptionCallback.current({ ...newLine, volume: newVolume });
+  }, [newLine]);
+
+  const debouncedNewLine = useThrottle(newLine, {
+    delay: 1000,
+    mode: "trailing",
+  });
 
   useEffect(() => {
     initData();
@@ -285,13 +300,8 @@ export default function Kline({ interval = "1d", symbol }: Props) {
 
   useEffect(() => {
     // re render ws
-    if (!chartRef.current) return;
-    const dataList = chartRef.current.getDataList();
-    if (!subscriptionCallback.current || !newLine || !dataList.length) return;
-    const volume = dataList[dataList.length - 1].volume || 0;
-    const newVolume = Number(newLine.volume) + volume;
-    subscriptionCallback.current({ ...newLine, volume: newVolume });
-  }, [newLine]);
+    updateChart();
+  }, [debouncedNewLine]);
 
   return <div id="klinecharts" className="w-full h-full" />;
 }
