@@ -12,19 +12,9 @@ import { setKlineInterval } from "@/store/klineInterval";
 import { _formatNumber, _numberShortener } from "@/lib/global";
 import fetchInfoCoint from "@/api/useFetchInfoCoint";
 import Kline from "@/components/Kline/Kline";
-
-const RecentTrades = dynamic(
-  () => import("@/components/RecentTrades/RecentTrades"),
-  {
-    ssr: false,
-  },
-);
-const OrderBook = dynamic(() => import("@/components/OrderBook/OrderBook"), {
-  ssr: false,
-});
-const Markets = dynamic(() => import("@/components/Markets/Markets"), {
-  ssr: false,
-});
+import Markets from "@/components/Markets/Markets";
+import OrderBook from "@/components/OrderBook/OrderBook";
+import RecentTrades from "@/components/RecentTrades/RecentTrades";
 export default function Page() {
   const dispatch = useDispatch();
   useBinanceSocket();

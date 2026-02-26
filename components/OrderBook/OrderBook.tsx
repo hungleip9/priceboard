@@ -4,8 +4,9 @@ import { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { useMemo } from "react";
 import { useThrottle } from "@/hooks/useThrottle";
+import React from "react";
 
-export default function OrderBook() {
+export default React.memo(function OrderBook() {
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
   const dataDepthStore = useSelector(
     (state: RootState) => state.dataDepth.value,
@@ -68,4 +69,4 @@ export default function OrderBook() {
       </div>
     </div>
   );
-}
+});

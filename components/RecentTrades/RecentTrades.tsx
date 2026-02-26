@@ -7,9 +7,9 @@ import {
 import "./RecentTrades.scss";
 import { RootState } from "@/store";
 import { useSelector } from "react-redux";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { useThrottle } from "@/hooks/useThrottle";
-export default function RecentTrades() {
+export default React.memo(function RecentTrades() {
   const symbolStore = useSelector((state: RootState) => state.symbol.value);
   const dataTradeStore = useSelector(
     (state: RootState) => state.dataTrade.value,
@@ -62,4 +62,4 @@ export default function RecentTrades() {
       </div>
     </div>
   );
-}
+});
