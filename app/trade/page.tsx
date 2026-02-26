@@ -4,7 +4,6 @@ import BaseIcon from "@/components/BaseIcon";
 import "./Trade.scss";
 import Radio from "@/components/Radio/Radio";
 import ChangeBox from "@/components/ChangeBox/ChangeBox";
-import dynamic from "next/dynamic";
 import { RootState } from "@/store";
 import { useSelector, useDispatch } from "react-redux";
 import useBinanceSocket from "@/hooks/useBinanceSocket";
